@@ -22,7 +22,7 @@ const Input = ({ category, label, name, placeholder, value, type = 'text', onCha
 				{label}
 			</label>
 			<input
-				className={cn('rounded-2xl placeholder-neutral-grey p-4', {
+				className={cn('rounded-2xl placeholder-neutral-grey py-2 px-3', {
 					'bg-neutral-lighter': category === 'authentication',
 					'bg-neutral-lightest': category === 'form',
 				})}
