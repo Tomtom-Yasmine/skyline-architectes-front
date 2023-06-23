@@ -24,6 +24,9 @@ module.exports = {
 				'action-basic': '#F3EEEB',
 				'action-hover': '#E8E0DC',
 			},
+			backgroundImage: {
+				authentication: 'url(\'assets/images/background_login.png\')',
+			},
 		},
 	},
 	plugins: [],

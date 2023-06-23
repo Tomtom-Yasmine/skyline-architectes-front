@@ -8,7 +8,16 @@ type Props = Omit<ComponentPropsWithoutRef<'input'>, 'onChange'> & {
 	onChange: (newValue: string) => void;
 };
 
-const Input = ({ category, label, name, placeholder, value, type = 'text', onChange }: Props) => {
+const Input = ({
+	category,
+	label,
+	name,
+	placeholder,
+	value,
+	type = 'text',
+	onChange,
+	...props
+}: Props) => {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value);
 	return (
 		<div className="flex flex-col gap-1">
@@ -31,6 +40,7 @@ const Input = ({ category, label, name, placeholder, value, type = 'text', onCha
 				value={value}
 				onChange={handleChange}
 				name={name}
+				{...props}
 			/>
 		</div>
 	);
