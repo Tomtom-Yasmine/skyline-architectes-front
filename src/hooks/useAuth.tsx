@@ -15,7 +15,7 @@ const initialState: AuthInfo = {
 
 type Action = {
 	type: 'login' | 'logout';
-	payload: { jwt?: string; onLogin?: () => void };
+	payload?: { jwt?: string; onLogin?: () => void };
 };
 
 const reducer = (state: AuthInfo, action: Action) => {
