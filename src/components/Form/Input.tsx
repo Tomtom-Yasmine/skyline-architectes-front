@@ -1,11 +1,12 @@
 import React from 'react';
 import { ComponentPropsWithoutRef } from 'react';
 import cn from 'classnames';
+import Error from './Error';
+import { ErrorMessage } from 'formik';
 
-type Props = Omit<ComponentPropsWithoutRef<'input'>, 'onChange'> & {
+type Props = ComponentPropsWithoutRef<'input'> & {
 	category: 'authentication' | 'form';
 	label: string;
-	onChange: (newValue: string) => void;
 };
 
 const Input = ({
@@ -15,12 +16,11 @@ const Input = ({
 	placeholder,
 	value,
 	type = 'text',
-	onChange,
+	className,
 	...props
 }: Props) => {
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value);
 	return (
-		<div className="flex flex-col gap-1">
+		<div className={cn('flex flex-col gap-1', className)}>
 			<label
 				htmlFor={name}
 				className={cn('font-bold px-1', {
@@ -38,10 +38,10 @@ const Input = ({
 				type={type}
 				placeholder={placeholder}
 				value={value}
-				onChange={handleChange}
 				name={name}
 				{...props}
 			/>
+			<ErrorMessage name={name} component={Error} />
 		</div>
 	);
 };
