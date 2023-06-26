@@ -10,12 +10,8 @@ type Props = {
 	onFormChange: (value: string) => void;
 };
 
-const SignupSchema = Yup.object().shape({
-	email: Yup.string()
-		.min(2, 'Trop court!')
-		.max(50, 'Trop long!')
-		.email('Le format doit etre celui d\'un email')
-		.required('Requis'),
+const LoginSchema = Yup.object().shape({
+	email: Yup.string().min(2).max(50).email().required(),
 	password: Yup.string().min(2, 'Trop court!').required('Requis'),
 });
 
@@ -25,7 +21,7 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 	return (
 		<Formik
 			initialValues={{ email: '', password: '' }}
-			validationSchema={SignupSchema}
+			validationSchema={LoginSchema}
 			onSubmit={(values, { setSubmitting }) => {
 				try {
 					//todo
