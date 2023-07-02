@@ -10,6 +10,8 @@ type Props = {
 };
 
 const schema = Yup.object().shape({
+	companyName: Yup.string().min(2).max(50).required(),
+	companySiret: Yup.string().max(14).required(),
 	companyAddressNumber: Yup.string().required(),
 	companyAddressStreet: Yup.string().required(),
 	companyAddressAdditional: Yup.string(),
@@ -23,6 +25,8 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 		<>
 			<Formik
 				initialValues={{
+					companySiret: '',
+					companyName: '',
 					companyAddressNumber: '',
 					companyAddressStreet: '',
 					companyAddressAdditional: '',
@@ -37,29 +41,56 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 				}}
 			>
 				{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-					<form onSubmit={handleSubmit} className="flex flex-col gap-9">
+					<form onSubmit={handleSubmit} className="flex flex-col gap-7">
 						<div className="flex flex-col gap-3">
-							<SectionTitle title="Adresse postale" />
+							<SectionTitle title="Informations de l'entreprise" />
 							<Input
 								category="authentication"
-								label="Numéro"
-								name="companyAddressNumber"
-								placeholder="4"
+								label="Nom de l'entreprise"
+								name="companyName"
+								placeholder="Company ..."
 								type="text"
-								value={values.companyAddressNumber}
+								value={values.companyName}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
 							<Input
 								category="authentication"
-								label="Voie"
-								name="companyAddressStreet"
-								placeholder="rue de la Paix"
+								label="Numéro de SIRET"
+								name="companySiret"
+								placeholder="34....."
 								type="text"
-								value={values.companyAddressStreet}
+								value={values.companySiret}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
+						</div>
+						<div className="flex flex-col gap-3">
+							<SectionTitle title="Adresse postale de l'entreprise" />
+							<div className="flex gap-4">
+								<Input
+									category="authentication"
+									label="Numéro"
+									name="companyAddressNumber"
+									placeholder="4"
+									type="text"
+									value={values.companyAddressNumber}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className="grow"
+								/>
+								<Input
+									category="authentication"
+									label="Voie"
+									name="companyAddressStreet"
+									placeholder="rue de la Paix"
+									type="text"
+									value={values.companyAddressStreet}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className="grow"
+								/>
+							</div>
 							<Input
 								category="authentication"
 								label="Complément d'adresse"

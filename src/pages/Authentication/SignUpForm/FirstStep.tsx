@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input, Button } from 'components';
 import * as Yup from 'yup';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import 'yup-phone';
 import { Formik } from 'formik';
 import SectionTitle from './SectionTitle';
@@ -15,10 +16,12 @@ const schema = Yup.object().shape({
 	lastName: Yup.string().min(2).max(50).required(),
 	firstName: Yup.string().min(2).max(50).required(),
 	email: Yup.string().min(2).max(50).email().required(),
-	// TODO : instaler yup-phone
-	phoneNumber: Yup.string().required(),
-	companyName: Yup.string().min(2).max(50).required(),
-	companySiret: Yup.string().max(14).required(),
+	phoneNumber: Yup.string().test(
+		'phone',
+		'Le numéro de téléphone est invalide',
+		(value) => !value || !!parsePhoneNumberFromString(value, 'FR')?.isValid()
+	),
+	password: Yup.string().min(8).required(),
 });
 
 const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: Props) => {
@@ -30,8 +33,7 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 					firstName: '',
 					email: '',
 					phoneNumber: '',
-					companySiret: '',
-					companyName: '',
+					password: '',
 				}}
 				validationSchema={schema}
 				onSubmit={(values, { setSubmitting }) => {
@@ -40,7 +42,7 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 				}}
 			>
 				{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-					<form onSubmit={handleSubmit} className="flex flex-col gap-9">
+					<form onSubmit={handleSubmit} className="flex flex-col gap-7">
 						<div className="flex flex-col gap-3">
 							<SectionTitle title="Informations personnelles" />
 							<div className="flex gap-4">
@@ -87,29 +89,19 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
-						</div>
-						<div className="flex flex-col gap-3">
-							<SectionTitle title="Informations de l'entreprise" />
 							<Input
 								category="authentication"
-								label="Nom de l'entreprise"
-								name="companyName"
-								placeholder="Company ..."
-								type="text"
-								value={values.companyName}
+								label="Mot de passe"
+								name="password"
+								placeholder="********"
+								type="password"
+								value={values.password}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
-							<Input
-								category="authentication"
-								label="Numéro de SIRET"
-								name="companySiret"
-								placeholder="34....."
-								type="text"
-								value={values.companySiret}
-								onChange={handleChange}
-								onBlur={handleBlur}
-							/>
+							<p className="text-neutral-white ">
+								Le mot de passe doit contenir au minimum 8 caractères
+							</p>
 						</div>
 						<Button category="primary" type="submit" disabled={isSubmitting}>
 							Suivant

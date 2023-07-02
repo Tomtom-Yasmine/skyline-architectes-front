@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button, StockageSelector } from 'components';
+import { Input, Button, StockageSelector, Radio } from 'components';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import SectionTitle from './SectionTitle';
@@ -10,17 +10,33 @@ type Props = {
 };
 
 const schema = Yup.object().shape({
-	password: Yup.string().min(8).required(),
+	cardHolder: Yup.string().required(),
+	cardNumber: Yup.string().required(),
+	expirationDate: Yup.string(),
+	cardSecurityCode: Yup.string().required(),
 });
 
 const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 	const [stockage, setStockage] = useState(20);
+	const paymentRadioData = [
+		{
+			label: 'Carte de crédit',
+			value: 'creditCard',
+		},
+		{
+			label: 'Paypal',
+			value: 'paypal',
+		},
+	];
 
 	return (
 		<>
 			<Formik
 				initialValues={{
-					password: '',
+					cardHolder: '',
+					cardNumber: '',
+					expirationDate: '',
+					cardSecurityCode: '',
 				}}
 				validationSchema={schema}
 				onSubmit={(values, { setSubmitting }) => {
@@ -31,24 +47,58 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 				}}
 			>
 				{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-					<form onSubmit={handleSubmit} className="flex flex-col gap-9">
+					<form onSubmit={handleSubmit} className="flex flex-col gap-7">
 						<div className="flex flex-col gap-3">
-							<SectionTitle title="Choix du mot de passe" />
+							<SectionTitle title="Offre de stockage" />
+							<StockageSelector currentStockage={stockage} onStockageChange={setStockage} />
+						</div>
+						<div className="flex flex-col gap-3">
+							<SectionTitle title="Paiement" />
+							<Radio elements={paymentRadioData} name="payment" />
 							<Input
 								category="authentication"
-								label="Mot de passe"
-								name="password"
-								placeholder="********"
-								type="password"
-								value={values.password}
+								label="Titulaire de la carte"
+								name="cardHolder"
+								placeholder="John Doe"
+								type="text"
+								value={values.cardHolder}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
-							<p className="text-neutral-white ">
-								Le mot de passe doit contenir au minimum 8 caractères
-							</p>
-							<SectionTitle title="Offre de stockage" />
-							<StockageSelector currentStockage={stockage} onStockageChange={setStockage} />
+							<Input
+								category="authentication"
+								label="Numéro de la carte"
+								name="cardNumber"
+								placeholder="XXXX XXXX XXXX XXXX"
+								type="text"
+								value={values.cardNumber}
+								onChange={handleChange}
+								onBlur={handleBlur}
+							/>
+							<div className="flex gap-4">
+								<Input
+									category="authentication"
+									label="Date d'expiration"
+									name="expirationDate"
+									placeholder="75000"
+									type="text"
+									value={values.expirationDate}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className="grow"
+								/>
+								<Input
+									category="authentication"
+									label="CVC"
+									name="cardSecurityCode"
+									placeholder="France"
+									type="text"
+									value={values.cardSecurityCode}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className="grow"
+								/>
+							</div>
 						</div>
 						<Button category="primary" type="submit" disabled={isSubmitting}>
 							Suivant

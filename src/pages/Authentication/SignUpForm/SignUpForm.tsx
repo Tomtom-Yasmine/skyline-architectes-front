@@ -20,7 +20,7 @@ type SignUpData = Partial<
 	SignUpDataFirstStep & SignUpDataSecondStep & SignUpDataThirdStep & SignUpDataFourthStep
 >;
 
-const NUMBER_OF_STEPS = 4;
+const NUMBER_OF_STEPS = 3;
 
 const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 	const [step, setStep] = useState(0);

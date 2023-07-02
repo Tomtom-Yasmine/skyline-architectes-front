@@ -11,11 +11,12 @@ export type SignUpDataFirstStep = {
 	firstName: string;
 	email: string;
 	phoneNumber: string;
-	companyName: string;
-	companySiret: string;
+	password: string;
 };
 
 export type SignUpDataSecondStep = {
+	companyName: string;
+	companySiret: string;
 	companyAddressNumber: string;
 	companyAddressStreet: string;
 	companyAddressAdditional: string;
@@ -25,7 +26,6 @@ export type SignUpDataSecondStep = {
 };
 
 export type SignUpDataThirdStep = {
-	password: string;
 	stockage: number;
 };
 
