@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
 import { Formik } from 'formik';
+// import axios from 'axios';
 
 type Props = {
 	onFormChange: (value: string) => void;
@@ -12,7 +13,7 @@ type Props = {
 
 const LoginSchema = Yup.object().shape({
 	email: Yup.string().min(2).max(50).email().required(),
-	password: Yup.string().min(2, 'Trop court!').required('Requis'),
+	passwordHash: Yup.string().min(2).required(),
 });
 
 const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
@@ -20,12 +21,12 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 
 	return (
 		<Formik
-			initialValues={{ email: '', password: '' }}
+			initialValues={{ email: '', passwordHash: '' }}
 			validationSchema={LoginSchema}
-			onSubmit={(values, { setSubmitting }) => {
+			onSubmit={async (values, { setSubmitting }) => {
 				try {
 					//todo
-					//const res = await axios.post('http://localhost:3000/api/auth/login', values);4
+					// const res = await axios.post('http://localhost:3001/login', values);
 					// const jwt = res.data;
 					const jwt =
 						'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNTE2MjM5MDIyfQ.O04bBJbUswVJt0HgS_UcdeslpEKKuSxHkotlrrI-2sE';
@@ -43,7 +44,7 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 			{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
 				<form
 					onSubmit={handleSubmit}
-					className="rounded-2xl bg-azul-500 p-8 flex flex-col gap-9 min-w-[32rem]"
+					className="rounded-2xl bg-azul-500 px-8 pt-5 pb-5 flex flex-col gap-4 min-w-[32rem]"
 				>
 					<div className="flex flex-col gap-6">
 						<h1 className="text-neutral-white text-5xl text-center font-semibold">
@@ -62,10 +63,10 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 						<Input
 							category="authentication"
 							label="Mot de passe"
-							name="password"
+							name="passwordHash"
 							placeholder="********"
 							type="password"
-							value={values.password}
+							value={values.passwordHash}
 							onChange={handleChange}
 							onBlur={handleBlur}
 						/>
@@ -74,11 +75,14 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 						</Button>
 					</div>
 					<div className="flex flex-col gap-4">
+						<button
+							onClick={() => console.log('Forgot password')}
+							className="text-neutral-white text-center font-semibold"
+						>
+							Mot de passe oublié
+						</button>
 						<Button category="secondary" onClick={() => handleFormChange('signUp')}>
 							{'S\'inscrire'}
-						</Button>
-						<Button category="secondary" onClick={() => console.log('todo')}>
-							Mot de passe oublié
 						</Button>
 					</div>
 				</form>
