@@ -10,12 +10,12 @@ type Props = {
 };
 
 const schema = Yup.object().shape({
-	addressNumber: Yup.string().required(),
-	addressStreet: Yup.string().required(),
-	addressAdditional: Yup.string(),
-	addressCity: Yup.string().required(),
-	addressZipCode: Yup.string().required(),
-	addressCountry: Yup.string().required(),
+	companyAddressNumber: Yup.string().required(),
+	companyAddressStreet: Yup.string().required(),
+	companyAddressAdditional: Yup.string(),
+	companyAddressCity: Yup.string().required(),
+	companyAddressZipCode: Yup.string().required(),
+	companyAddressCountry: Yup.string().required(),
 });
 
 const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
@@ -23,12 +23,12 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 		<>
 			<Formik
 				initialValues={{
-					addressNumber: '',
-					addressStreet: '',
-					addressAdditional: '',
-					addressCity: '',
-					addressZipCode: '',
-					addressCountry: '',
+					companyAddressNumber: '',
+					companyAddressStreet: '',
+					companyAddressAdditional: '',
+					companyAddressCity: '',
+					companyAddressZipCode: '',
+					companyAddressCountry: '',
 				}}
 				validationSchema={schema}
 				onSubmit={(values, { setSubmitting }) => {
@@ -43,40 +43,40 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 							<Input
 								category="authentication"
 								label="Numéro"
-								name="addressNumber"
+								name="companyAddressNumber"
 								placeholder="4"
 								type="text"
-								value={values.addressNumber}
+								value={values.companyAddressNumber}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
 							<Input
 								category="authentication"
 								label="Voie"
-								name="addressStreet"
+								name="companyAddressStreet"
 								placeholder="rue de la Paix"
 								type="text"
-								value={values.addressStreet}
+								value={values.companyAddressStreet}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
 							<Input
 								category="authentication"
 								label="Complément d'adresse"
-								name="addressAdditional"
+								name="companyAddressAdditional"
 								placeholder="Immeuble B, étage 2, porte 4"
 								type="text"
-								value={values.addressAdditional}
+								value={values.companyAddressAdditional}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
 							<Input
 								category="authentication"
 								label="Ville"
-								name="addressCity"
+								name="companyAddressCity"
 								placeholder="Paris"
 								type="text"
-								value={values.addressCity}
+								value={values.companyAddressCity}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
@@ -84,10 +84,10 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 								<Input
 									category="authentication"
 									label="Code postal"
-									name="addressZipCode"
+									name="companyAddressZipCode"
 									placeholder="75000"
 									type="text"
-									value={values.addressZipCode}
+									value={values.companyAddressZipCode}
 									onChange={handleChange}
 									onBlur={handleBlur}
 									className="grow"
@@ -95,10 +95,10 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 								<Input
 									category="authentication"
 									label="Pays"
-									name="addressCountry"
+									name="companyAddressCountry"
 									placeholder="France"
 									type="text"
-									value={values.addressCountry}
+									value={values.companyAddressCountry}
 									onChange={handleChange}
 									onBlur={handleBlur}
 									className="grow"

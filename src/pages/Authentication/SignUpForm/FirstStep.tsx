@@ -12,13 +12,13 @@ type Props = {
 };
 
 const schema = Yup.object().shape({
-	name: Yup.string().min(2).max(50).required(),
+	lastName: Yup.string().min(2).max(50).required(),
 	firstName: Yup.string().min(2).max(50).required(),
 	email: Yup.string().min(2).max(50).email().required(),
 	// TODO : instaler yup-phone
-	phone: Yup.string().required(),
-	company: Yup.string().min(2).max(50).required(),
-	siret: Yup.string().max(14).required(),
+	phoneNumber: Yup.string().required(),
+	companyName: Yup.string().min(2).max(50).required(),
+	companySiret: Yup.string().max(14).required(),
 });
 
 const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: Props) => {
@@ -26,12 +26,12 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 		<>
 			<Formik
 				initialValues={{
-					name: '',
+					lastName: '',
 					firstName: '',
 					email: '',
-					phone: '',
-					siret: '',
-					company: '',
+					phoneNumber: '',
+					companySiret: '',
+					companyName: '',
 				}}
 				validationSchema={schema}
 				onSubmit={(values, { setSubmitting }) => {
@@ -47,10 +47,10 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 								<Input
 									category="authentication"
 									label="Nom"
-									name="name"
+									name="lastName"
 									placeholder="NOM"
 									type="text"
-									value={values.name}
+									value={values.lastName}
 									onChange={handleChange}
 									onBlur={handleBlur}
 									className="grow"
@@ -80,10 +80,10 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 							<Input
 								category="authentication"
 								label="Téléphone (mobile)"
-								name="phone"
+								name="phoneNumber"
 								placeholder="06 XX XX XX XX"
 								type="phone"
-								value={values.phone}
+								value={values.phoneNumber}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
@@ -93,20 +93,20 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 							<Input
 								category="authentication"
 								label="Nom de l'entreprise"
-								name="company"
+								name="companyName"
 								placeholder="Company ..."
 								type="text"
-								value={values.company}
+								value={values.companyName}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>
 							<Input
 								category="authentication"
 								label="Numéro de SIRET"
-								name="siret"
+								name="companySiret"
 								placeholder="34....."
 								type="text"
-								value={values.siret}
+								value={values.companySiret}
 								onChange={handleChange}
 								onBlur={handleBlur}
 							/>

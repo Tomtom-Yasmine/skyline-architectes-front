@@ -7,21 +7,21 @@ type Role = 'user' | 'admin';
 
 //Authentication
 export type SignUpDataFirstStep = {
-	name: string;
+	lastName: string;
 	firstName: string;
 	email: string;
-	phone: string;
-	company: string;
-	siret: string;
+	phoneNumber: string;
+	companyName: string;
+	companySiret: string;
 };
 
 export type SignUpDataSecondStep = {
-	addressNumber: string;
-	addressStreet: string;
-	addressAdditional: string;
-	addressCity: string;
-	addressZipCode: string;
-	addressCountry: string;
+	companyAddressNumber: string;
+	companyAddressStreet: string;
+	companyAddressAdditional: string;
+	companyAddressCity: string;
+	companyAddressZipCode: string;
+	companyAddressCountry: string;
 };
 
 export type SignUpDataThirdStep = {

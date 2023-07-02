@@ -38,18 +38,8 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 					onSubmit={(values) => changeStep(0, values)}
 				/>
 			)}
-			{step === 1 && (
-				<SecondStep
-					onLoginClick={handleLoginClick}
-					onSubmit={(values) => changeStep(1, values)}
-				/>
-			)}
-			{step === 2 && (
-				<ThirdStep
-					onLoginClick={handleLoginClick}
-					onSubmit={(values) => changeStep(2, values)}
-				/>
-			)}
+			{step === 1 && <SecondStep onSubmit={(values) => changeStep(1, values)} />}
+			{step === 2 && <ThirdStep onSubmit={(values) => changeStep(2, values)} />}
 		</div>
 	);
 };
