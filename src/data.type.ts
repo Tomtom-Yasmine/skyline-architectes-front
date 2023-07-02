@@ -14,3 +14,20 @@ export type SignUpDataFirstStep = {
 	company: string;
 	siret: string;
 };
+
+export type SignUpDataSecondStep = {
+	addressNumber: string;
+	addressStreet: string;
+	addressAdditional: string;
+	addressCity: string;
+	addressZipCode: string;
+	addressCountry: string;
+};
+
+export type SignUpDataThirdStep = {
+	cardHolder: string;
+	cardNumber: string;
+	expirationDate: string;
+	cardSecurityCode: string;
+	stockage: number;
+};

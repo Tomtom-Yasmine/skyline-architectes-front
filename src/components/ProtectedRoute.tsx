@@ -5,7 +5,6 @@ import { Outlet, Navigate } from 'react-router-dom';
 const ProtectedRoute = () => {
 	const auth = useAuth();
 
-	console.log(!auth?.info.isLogged);
 	if (!auth?.info.isLogged)
 		return (
 			<Navigate

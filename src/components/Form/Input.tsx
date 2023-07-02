@@ -31,7 +31,7 @@ const Input = ({
 				{label}
 			</label>
 			<input
-				className={cn('rounded-2xl placeholder-neutral-grey py-2 px-3', {
+				className={cn('rounded-xl placeholder-neutral-grey py-1 px-2', {
 					'bg-neutral-lighter': category === 'authentication',
 					'bg-neutral-lightest': category === 'form',
 				})}

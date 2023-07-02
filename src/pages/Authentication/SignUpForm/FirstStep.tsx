@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input, Button } from 'components';
-// import axios, { Axios } from 'axios';
 import * as Yup from 'yup';
 import 'yup-phone';
 import { Formik } from 'formik';
@@ -41,7 +40,7 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 				}}
 			>
 				{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-					<form onSubmit={handleSubmit} className="flex flex-col gap-9s">
+					<form onSubmit={handleSubmit} className="flex flex-col gap-9">
 						<div className="flex flex-col gap-3">
 							<SectionTitle title="Informations personnelles" />
 							<div className="flex gap-4">
@@ -54,6 +53,7 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 									value={values.name}
 									onChange={handleChange}
 									onBlur={handleBlur}
+									className="grow"
 								/>
 								<Input
 									category="authentication"
@@ -64,6 +64,7 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 									value={values.firstName}
 									onChange={handleChange}
 									onBlur={handleBlur}
+									className="grow"
 								/>
 							</div>
 							<Input
