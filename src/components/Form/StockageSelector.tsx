@@ -13,9 +13,13 @@ type Props = {
 const StockageSelector = ({ currentStockage, onStockageChange: handleStockageChange }: Props) => {
 	const isDisabled = currentStockage <= 20;
 
-	const handleAddStockage = () => handleStockageChange(currentStockage + 20);
+	const handleAddStockage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.preventDefault();
+		handleStockageChange(currentStockage + 20);
+	};
 
-	const handleRemoveStockage = () => {
+	const handleRemoveStockage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.preventDefault();
 		if (!isDisabled) handleStockageChange(currentStockage - 20);
 	};
 

@@ -4,15 +4,23 @@ import Step from './Step';
 import FirstStep from './FirstStep';
 import SecondStep from './SecondStep';
 import ThirdStep from './ThirdStep';
-import { SignUpDataFirstStep, SignUpDataSecondStep, SignUpDataThirdStep } from 'data.type';
+import FourthStep from './FourthStep';
+import {
+	SignUpDataFirstStep,
+	SignUpDataSecondStep,
+	SignUpDataThirdStep,
+	SignUpDataFourthStep,
+} from 'data.type';
 
 type Props = {
 	onLoginClick: () => void;
 };
 
-type SignUpData = Partial<SignUpDataFirstStep & SignUpDataSecondStep & SignUpDataThirdStep>;
+type SignUpData = Partial<
+	SignUpDataFirstStep & SignUpDataSecondStep & SignUpDataThirdStep & SignUpDataFourthStep
+>;
 
-const NUMBER_OF_STEPS = 3;
+const NUMBER_OF_STEPS = 4;
 
 const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 	const [step, setStep] = useState(0);
@@ -40,6 +48,7 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 			)}
 			{step === 1 && <SecondStep onSubmit={(values) => changeStep(1, values)} />}
 			{step === 2 && <ThirdStep onSubmit={(values) => changeStep(2, values)} />}
+			{step === 3 && <FourthStep onSubmit={(values) => changeStep(3, values)} />}
 		</div>
 	);
 };

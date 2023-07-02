@@ -25,9 +25,13 @@ export type SignUpDataSecondStep = {
 };
 
 export type SignUpDataThirdStep = {
+	password: string;
+	stockage: number;
+};
+
+export type SignUpDataFourthStep = {
 	cardHolder: string;
 	cardNumber: string;
 	expirationDate: string;
 	cardSecurityCode: string;
-	stockage: number;
 };

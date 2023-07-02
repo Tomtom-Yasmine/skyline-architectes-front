@@ -13,7 +13,7 @@ type Props = {
 
 const LoginSchema = Yup.object().shape({
 	email: Yup.string().min(2).max(50).email().required(),
-	passwordHash: Yup.string().min(2).required(),
+	passwordHash: Yup.string().min(8).required(),
 });
 
 const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
