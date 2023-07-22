@@ -1,11 +1,10 @@
 import React from 'react';
 import { Input, Button } from 'components';
-// import axios, { Axios } from 'axios';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
 import { Formik } from 'formik';
-// import axios from 'axios';
 
 type Props = {
 	onFormChange: (value: string) => void;
@@ -13,7 +12,7 @@ type Props = {
 
 const LoginSchema = Yup.object().shape({
 	email: Yup.string().min(2).max(50).email().required(),
-	passwordHash: Yup.string().min(8).required(),
+	password: Yup.string().min(8).required(),
 });
 
 const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
@@ -21,15 +20,12 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 
 	return (
 		<Formik
-			initialValues={{ email: '', passwordHash: '' }}
+			initialValues={{ email: '', password: '' }}
 			validationSchema={LoginSchema}
 			onSubmit={async (values, { setSubmitting }) => {
 				try {
-					//todo
-					// const res = await axios.post('http://localhost:3001/login', values);
-					// const jwt = res.data;
-					const jwt =
-						'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNTE2MjM5MDIyfQ.O04bBJbUswVJt0HgS_UcdeslpEKKuSxHkotlrrI-2sE';
+					const res = await axios.post('http://localhost:3001/login', values);
+					const { sessionToken: jwt } = res.data;
 					auth?.dispatch({
 						type: 'login',
 						payload: { jwt, onLogin: () => console.log('Login') },
@@ -63,10 +59,10 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 						<Input
 							category="authentication"
 							label="Mot de passe"
-							name="passwordHash"
+							name="password"
 							placeholder="********"
 							type="password"
-							value={values.passwordHash}
+							value={values.password}
 							onChange={handleChange}
 							onBlur={handleBlur}
 						/>

@@ -4,33 +4,39 @@ import Step from './Step';
 import FirstStep from './FirstStep';
 import SecondStep from './SecondStep';
 import ThirdStep from './ThirdStep';
-import FourthStep from './FourthStep';
-import {
-	SignUpDataFirstStep,
-	SignUpDataSecondStep,
-	SignUpDataThirdStep,
-	SignUpDataFourthStep,
-} from 'data.type';
+import { SignUpDataFirstStep, SignUpDataSecondStep, SignUpDataThirdStep } from 'data.type';
+import axios from 'axios';
+import useAuth from 'hooks/useAuth';
+import { toast } from 'react-toastify';
 
 type Props = {
 	onLoginClick: () => void;
 };
 
-type SignUpData = Partial<
-	SignUpDataFirstStep & SignUpDataSecondStep & SignUpDataThirdStep & SignUpDataFourthStep
->;
+type SignUpData = Partial<SignUpDataFirstStep & SignUpDataSecondStep & SignUpDataThirdStep>;
 
 const NUMBER_OF_STEPS = 3;
 
 const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
+	const auth = useAuth();
 	const [step, setStep] = useState(0);
 	const [data, setData] = useState<SignUpData>();
-	console.log('todo', data);
-	const changeStep = (stepNumber: number, stepData: SignUpData) => {
-		setData(stepData);
+
+	const changeStep = async (stepNumber: number, stepData: SignUpData) => {
+		setData((data) => ({ ...data, ...stepData }));
 		if (stepNumber + 1 === NUMBER_OF_STEPS) {
-			// TODO : call api
-			console.log(stepData);
+			console.log('data', data);
+			try {
+				const res = await axios.post('http://localhost:3001/signup', data);
+				const { sessionToken: jwt } = res.data;
+				auth?.dispatch({
+					type: 'login',
+					payload: { jwt, onLogin: () => console.log('Login') },
+				});
+				toast.success('Inscription réussie');
+			} catch (e) {
+				toast.error('Email ou numéro de téléphone déjà utilisé');
+			}
 			return;
 		}
 		setStep(stepNumber + 1);
@@ -48,7 +54,6 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 			)}
 			{step === 1 && <SecondStep onSubmit={(values) => changeStep(1, values)} />}
 			{step === 2 && <ThirdStep onSubmit={(values) => changeStep(2, values)} />}
-			{step === 3 && <FourthStep onSubmit={(values) => changeStep(3, values)} />}
 		</div>
 	);
 };

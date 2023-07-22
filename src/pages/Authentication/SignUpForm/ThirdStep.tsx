@@ -80,7 +80,7 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 									category="authentication"
 									label="Date d'expiration"
 									name="expirationDate"
-									placeholder="75000"
+									placeholder="04/24"
 									type="text"
 									value={values.expirationDate}
 									onChange={handleChange}
@@ -91,7 +91,7 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 									category="authentication"
 									label="CVC"
 									name="cardSecurityCode"
-									placeholder="France"
+									placeholder="XXX"
 									type="text"
 									value={values.cardSecurityCode}
 									onChange={handleChange}

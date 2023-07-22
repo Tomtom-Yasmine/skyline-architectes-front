@@ -28,10 +28,3 @@ export type SignUpDataSecondStep = {
 export type SignUpDataThirdStep = {
 	stockage: number;
 };
-
-export type SignUpDataFourthStep = {
-	cardHolder: string;
-	cardNumber: string;
-	expirationDate: string;
-	cardSecurityCode: string;
-};
