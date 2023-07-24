@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { ReactComponent as PinIconFull } from 'assets/icons/pin_full.svg';
 import { ReactComponent as PinIconEmpty } from 'assets/icons/pin_empty.svg';
 import { ReactComponent as DownloadIcon } from 'assets/icons/download.svg';
+import { ReactComponent as FileIcon } from 'assets/icons/file_empty.svg';
+import { ReactComponent as PDFIcon } from 'assets/icons/pdf.svg';
+import { ReactComponent as ImageIcon } from 'assets/icons/image.svg';
+import { ReactComponent as ExcelIcon } from 'assets/icons/calc.svg';
 import Options from './Options';
 
 type Props = {
-	icon: React.ReactNode;
 	name: string;
 	isPinned: boolean;
 	date: string;
@@ -21,7 +24,6 @@ type Props = {
 };
 
 const FileLine = ({
-	icon,
 	name,
 	isPinned,
 	date,
@@ -34,12 +36,20 @@ const FileLine = ({
 }: Props) => {
 	const [newName, setNewName] = useState(name);
 
-	//option à mettre
-	//option composant
+	const getIcon = (url: string) => {
+		const lastDotIndex = url.lastIndexOf('.');
+		const extension = lastDotIndex === -1 ? '' : url.slice(lastDotIndex + 1);
+
+		if (extension === 'pdf') return <PDFIcon />;
+		if (['png', 'jpg', 'jpeg', 'gif'].includes(extension)) return <ImageIcon />;
+		if (['xls', 'xlsx'].includes(extension)) return <ExcelIcon />;
+
+		return <FileIcon />;
+	};
 
 	return (
 		<div className="flex items-center gap-7 h-12 px-3 bg-neutral-lighter hover:bg-light-blue/20">
-			{icon}
+			{getIcon(url)}
 
 			<div className="flex-1 truncate">
 				{isNameBeingEdited ? (
