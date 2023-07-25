@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import useAuth from 'hooks/useAuth';
 import { FileLine, UploadFile } from 'components';
 import { FilesArrayHeader } from 'components';
 import { toast } from 'react-toastify';
 import FileFilters from './FilesFilters';
 import { Option } from 'react-multi-select-component';
+import PinnedFileCard from './PinedFileCard';
+import { File } from 'data.type';
+import { getExtensionType } from 'helper/files';
 
 const filterOptions: Option[] = [
 	{ label: 'Images', value: 'images' },
@@ -13,22 +15,11 @@ const filterOptions: Option[] = [
 ];
 
 const Home = () => {
-	const auth = useAuth();
-
-	const [files, setFiles] = useState<
-		{
-			name: string;
-			date: Date;
-			size: number;
-			id: string;
-			isPinned: boolean;
-			isEditing: boolean;
-			url: string;
-		}[]
-	>([
+	const [files, setFiles] = useState<File[]>([
 		{
 			name: 'Fichier 1',
-			date: new Date(),
+			creationDate: new Date(),
+			lastOpenDate: new Date(),
 			size: 50.06,
 			id: '1',
 			isPinned: false,
@@ -36,8 +27,19 @@ const Home = () => {
 			url: '../assets/icons/add.svg',
 		},
 		{
+			name: 'Image 10',
+			creationDate: new Date(),
+			lastOpenDate: new Date(),
+			size: 50.06,
+			id: '10',
+			isPinned: true,
+			isEditing: false,
+			url: 'https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive.jpg',
+		},
+		{
 			name: 'Fichier 2',
-			date: new Date(),
+			creationDate: new Date(),
+			lastOpenDate: new Date(),
 			size: 4.06,
 			id: '2',
 			isPinned: true,
@@ -46,7 +48,8 @@ const Home = () => {
 		},
 		{
 			name: 'Fichier 3',
-			date: new Date(),
+			creationDate: new Date(),
+			lastOpenDate: new Date(),
 			size: 14.26,
 			id: '3',
 			isPinned: false,
@@ -136,18 +139,16 @@ const Home = () => {
 		setFiles(newFiles);
 	};
 
-	const [sort, setSort] = useState<{ direction: 'up' | 'down'; column: 'name' | 'date' | 'size' }>(
-		{
-			direction: 'up',
-			column: 'name',
-		}
-	);
+	const [sort, setSort] = useState<{
+		direction: 'up' | 'down';
+		column: 'name' | 'creationDate' | 'size';
+	}>({
+		direction: 'up',
+		column: 'name',
+	});
 
-	const handleSort = (direction: 'up' | 'down', column: 'name' | 'date' | 'size') => {
+	const handleSort = (direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') => {
 		const newFiles = files.sort((a, b) => {
-			console.log(a[column]);
-			console.log(b[column]);
-			console.log(a[column] < b[column]);
 			if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
 			if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
 			return 0;
@@ -177,7 +178,21 @@ const Home = () => {
 
 	return (
 		<main className="bg-neutral-white  gap-3">
-			<button onClick={() => auth?.dispatch({ type: 'logout' })}>Logout</button>
+			<div className="flex gap-4 rounded-3xl bg-neutral-light p-4 w-full overflow-hidden">
+				{' '}
+				{/* TODO add a hidden scrollbar */}
+				{files
+					.filter((file) => file.isPinned)
+					.map((file) => (
+						<PinnedFileCard
+							onPinClick={handlePinClick(file.id)}
+							options={createOptions(file.id)}
+							key={file.id}
+							file={file}
+							extensionType={getExtensionType(file.url)}
+						/>
+					))}
+			</div>
 			<UploadFile />
 			<div className="flex flex-col bg-neutral-light py-5 px-1 rounded-3xl">
 				<FilesArrayHeader
@@ -198,7 +213,7 @@ const Home = () => {
 							label: 'Nom',
 						},
 						{
-							name: 'date',
+							name: 'creationDate',
 							label: 'Date',
 						},
 						{
@@ -206,7 +221,7 @@ const Home = () => {
 							label: 'Taille',
 						},
 					]}
-					onSortChange={(direction: 'up' | 'down', column: 'name' | 'date' | 'size') =>
+					onSortChange={(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
 						handleSort(direction, column)
 					}
 				/>
@@ -218,7 +233,7 @@ const Home = () => {
 								name={file.name}
 								isNameBeingEdited={file.isEditing}
 								isPinned={file.isPinned}
-								date={file.date}
+								date={file.creationDate}
 								url={file.url}
 								additionalInformation={`${file.size} Mo`}
 								options={createOptions(file.id)}
