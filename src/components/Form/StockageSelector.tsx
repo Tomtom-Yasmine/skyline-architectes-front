@@ -8,9 +8,14 @@ const PRICE_PER_GB = 1;
 type Props = {
 	currentStockage: number;
 	onStockageChange: (stockage: number) => void;
+	onLightBackground?: boolean;
 };
 
-const StockageSelector = ({ currentStockage, onStockageChange: handleStockageChange }: Props) => {
+const StockageSelector = ({
+	currentStockage,
+	onStockageChange: handleStockageChange,
+	onLightBackground = false,
+}: Props) => {
 	const isDisabled = currentStockage <= 20;
 
 	const handleAddStockage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -27,32 +32,52 @@ const StockageSelector = ({ currentStockage, onStockageChange: handleStockageCha
 		<div>
 			<div className="flex justify-between items-center">
 				<button
-					className={cn(
-						'rounded-full h-10 w-10 flex items-center  justify-center bg-slate-50',
-						{
-							'bg-slate-300 cursor-not-allowed': isDisabled,
-							'bg-slate-50': !isDisabled,
-						}
-					)}
+					className={cn('rounded-full h-10 w-10 flex items-center  justify-center', {
+						'bg-slate-300 cursor-not-allowed': isDisabled,
+						'bg-slate-50': !isDisabled && !onLightBackground,
+						'bg-neutral-light': !isDisabled && onLightBackground,
+					})}
 					onClick={handleRemoveStockage}
 					disabled={isDisabled}
 				>
 					<RemoveIcon />
 				</button>
 				<div className="flex flex-col items-center justify-center">
-					<span className="text-5xl font-bold text-neutral-white">{currentStockage} GO</span>
-					<span className="text-neutral-white text-2xl">
+					<span
+						className={cn('text-5xl font-bold', {
+							'text-neutral-950': onLightBackground,
+							'text-neutral-white': !onLightBackground,
+						})}
+					>
+						{currentStockage} GO
+					</span>
+					<span
+						className={cn('text-2xl', {
+							'text-neutral-950': onLightBackground,
+							'text-neutral-white': !onLightBackground,
+						})}
+					>
 						soit {currentStockage * PRICE_PER_GB} €*
 					</span>
 				</div>
 				<button
-					className="rounded-full h-10 w-10 flex items-center  justify-center bg-slate-50"
+					className={cn('rounded-full h-10 w-10 flex items-center  justify-center', {
+						'bg-slate-50': !onLightBackground,
+						'bg-neutral-light': onLightBackground,
+					})}
 					onClick={handleAddStockage}
 				>
 					<AddIcon />
 				</button>
 			</div>
-			<span className="text-neutral-white text-sm">* Paiment en une fois</span>
+			<span
+				className={cn('text-sm', {
+					'text-neutral-950': onLightBackground,
+					'text-neutral-white': !onLightBackground,
+				})}
+			>
+				* Paiment en une fois
+			</span>
 		</div>
 	);
 };

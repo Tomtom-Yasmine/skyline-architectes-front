@@ -8,7 +8,7 @@ type Props = {
 };
 const Tabs = ({ tabItems, currentTab, onTabClick: handleTabClick }: Props) => {
 	return (
-		<div className="flex flex-row gap-7 border-b-4 py-2 border-solid border-azul-100 mr-32">
+		<div className="flex flex-row gap-7 border-b-4 py-2 border-solid border-azul-100 mr-32 text-xl">
 			{tabItems.map((tab) => (
 				<button
 					onClick={() => handleTabClick(tab.name)}
