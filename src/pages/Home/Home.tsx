@@ -3,6 +3,14 @@ import useAuth from 'hooks/useAuth';
 import { FileLine, UploadFile } from 'components';
 import { FilesArrayHeader } from 'components';
 import { toast } from 'react-toastify';
+import FileFilters from './FilesFilters';
+import { Option } from 'react-multi-select-component';
+
+const filterOptions: Option[] = [
+	{ label: 'Images', value: 'images' },
+	{ label: 'PDF', value: 'pdf' },
+	{ label: 'excels', value: 'excels' },
+];
 
 const Home = () => {
 	const auth = useAuth();
@@ -46,6 +54,7 @@ const Home = () => {
 			url: 'C:/Users/yasmi/Data/Etudes/Bachelor/Mémoire/abreviations.pdf',
 		},
 	]);
+	const [filters, setFilters] = useState<string[]>([]);
 
 	const createOptions = (fileId: string) => [
 		{
@@ -146,12 +155,41 @@ const Home = () => {
 		setFiles(newFiles);
 		setSort({ direction, column });
 	};
+
+	const getFilteredFiles = () => {
+		if (filters.length === 0) return files;
+		return files.filter((file) => {
+			return (
+				(filters.includes('images') && file.url.includes('jpg')) ||
+				(filters.includes('pdf') && file.url.includes('pdf')) ||
+				(filters.includes('excels') && file.url.includes('xls'))
+			);
+		});
+	};
+
+	const handleChangeFilters = (filters: Option[]) => {
+		//TODO better understand this package
+		filters.map((filter) => filter.value);
+		setFilters(filters.map((filter) => filter.value));
+	};
+
+	console.log(filters);
+
 	return (
 		<main className="bg-neutral-white  gap-3">
 			<button onClick={() => auth?.dispatch({ type: 'logout' })}>Logout</button>
 			<UploadFile />
 			<div className="flex flex-col bg-neutral-light py-5 px-1 rounded-3xl">
 				<FilesArrayHeader
+					filter={
+						<FileFilters
+							onFiltersChange={handleChangeFilters}
+							filtersSelected={filterOptions.filter((filter) =>
+								filters.includes(filter.value)
+							)}
+							options={filterOptions}
+						/>
+					}
 					sortDirection={sort.direction}
 					columnSorted={sort.column}
 					columns={[
@@ -174,7 +212,7 @@ const Home = () => {
 				/>
 
 				<div className="bg-neutral-lighter w-full flex flex-col items-center ">
-					{files.map((file, index) => (
+					{getFilteredFiles().map((file, index) => (
 						<React.Fragment key={file.id}>
 							<FileLine
 								name={file.name}

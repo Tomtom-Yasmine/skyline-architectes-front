@@ -7,6 +7,7 @@ import { ReactComponent as PDFIcon } from 'assets/icons/pdf.svg';
 import { ReactComponent as ImageIcon } from 'assets/icons/image.svg';
 import { ReactComponent as ExcelIcon } from 'assets/icons/calc.svg';
 import Options from './Options';
+import { getExtensionType } from 'helper/files';
 
 type Props = {
 	name: string;
@@ -36,16 +37,18 @@ const FileLine = ({
 }: Props) => {
 	const [newName, setNewName] = useState(name);
 
-	const getIcon = (url: string, className: string) => {
-		const lastDotIndex = url.lastIndexOf('.');
-		const extension = lastDotIndex === -1 ? '' : url.slice(lastDotIndex + 1);
-
-		if (extension === 'pdf') return <PDFIcon className={className} />;
-		if (['png', 'jpg', 'jpeg', 'gif'].includes(extension))
+	const getIcon = (fileName: string, className: string) => {
+		const extension = getExtensionType(fileName);
+		switch (extension) {
+		case 'pdf':
+			return <PDFIcon className={className} />;
+		case 'image':
 			return <ImageIcon className={className} />;
-		if (['xls', 'xlsx'].includes(extension)) return <ExcelIcon className={className} />;
-
-		return <FileIcon className={className} />;
+		case 'excel':
+			return <ExcelIcon className={className} />;
+		default:
+			return <FileIcon className={className} />;
+		}
 	};
 	return (
 		<div className="grid grid-cols-5-1-1-1 hover:bg-light-blue/20 h-12 items-center w-full px-3">
