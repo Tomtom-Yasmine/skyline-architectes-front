@@ -1,10 +1,10 @@
 import React from 'react';
-import { File } from 'data.type';
+import { FileData } from 'data.type';
 import { ReactComponent as PinIconFull } from 'assets/icons/pin_full.svg';
 import Options from 'components/Options';
 
 type Props = {
-	file: File;
+	file: FileData;
 	extensionType: string;
 	onPinClick: () => void;
 	options?: Array<{

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { FileLine, UploadFile } from 'components';
+import { Button, FileLine, UploadFile } from 'components';
 import { FilesArrayHeader } from 'components';
 import { toast } from 'react-toastify';
 import FileFilters from './FilesFilters';
 import { Option } from 'react-multi-select-component';
 import PinnedFileCard from './PinedFileCard';
-import { File } from 'data.type';
+import { FileData } from 'data.type';
 import { getExtensionType } from 'helper/files';
 
 const filterOptions: Option[] = [
@@ -15,7 +15,7 @@ const filterOptions: Option[] = [
 ];
 
 const Home = () => {
-	const [files, setFiles] = useState<File[]>([
+	const [files, setFiles] = useState<FileData[]>([
 		{
 			name: 'Fichier 1',
 			creationDate: new Date(),
@@ -58,6 +58,7 @@ const Home = () => {
 		},
 	]);
 	const [filters, setFilters] = useState<string[]>([]);
+	const [newFile, setNewFile] = useState<File | null>(null);
 
 	const createOptions = (fileId: string) => [
 		{
@@ -177,7 +178,7 @@ const Home = () => {
 	console.log(filters);
 
 	return (
-		<main className="bg-neutral-white  gap-3">
+		<main className="bg-neutral-white  gap-12 flex flex-col">
 			<div className="flex gap-4 rounded-3xl bg-neutral-light p-4 w-full overflow-hidden">
 				{' '}
 				{/* TODO add a hidden scrollbar */}
@@ -193,7 +194,6 @@ const Home = () => {
 						/>
 					))}
 			</div>
-			<UploadFile />
 			<div className="flex flex-col bg-neutral-light py-5 px-1 rounded-3xl">
 				<FilesArrayHeader
 					filter={
@@ -245,6 +245,19 @@ const Home = () => {
 							)}
 						</React.Fragment>
 					))}
+				</div>
+			</div>
+			<div className="flex items-center w-full p-4 bg-neutral-light rounded-3xl gap-8">
+				<UploadFile file={newFile} onFileChange={setNewFile} />
+				<div className="flex flex-col justify-between h-20">
+					{newFile && (
+						<span className="text-neutral-dark text-lg">
+							Poid : {(newFile.size / (1024 * 1024)).toFixed(2)} mo
+						</span>
+					)}
+					<Button className="px-8" category={'secondary'}>
+						Uploader le fichier
+					</Button>
 				</div>
 			</div>
 		</main>

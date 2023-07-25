@@ -28,3 +28,14 @@ export type SignUpDataSecondStep = {
 export type SignUpDataThirdStep = {
 	stockage: number;
 };
+
+export type FileData = {
+	name: string;
+	creationDate: Date;
+	lastOpenDate: Date;
+	size: number;
+	id: string;
+	isPinned: boolean;
+	isEditing: boolean;
+	url: string;
+};
