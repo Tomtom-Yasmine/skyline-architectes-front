@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ReactComponent as DotIcon } from 'assets/icons/dots.svg';
-import useOutsideClicker from 'hooks/useOutsideClicker';
+import { useOutsideClicker } from 'hooks';
 import cn from 'classnames';
 
 type Props = {
@@ -22,12 +22,12 @@ const Options = ({ options }: Props) => {
 				<DotIcon />
 			</button>
 			{isOpen && (
-				<div className="absolute bg-neutral-light rounded-3xl text-left drop-shadow-md">
+				<div className="absolute bg-neutral-light rounded-3xl text-left drop-shadow-md left-10 top-[-0.5rem]">
 					{options.map((option, index) => (
 						<button
 							key={option.label}
 							onClick={option.onClick}
-							className={cn('p-2 hover:bg-neutral-grey w-full min-w-max text-left', {
+							className={cn('p-2 hover:bg-light-blue/20  w-32 text-left', {
 								'rounded-t-2xl': index === 0,
 								'rounded-b-2xl': index === options.length - 1,
 							})}

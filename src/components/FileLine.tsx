@@ -11,7 +11,7 @@ import Options from './Options';
 type Props = {
 	name: string;
 	isPinned: boolean;
-	date: string;
+	date: Date;
 	url: string;
 	additionalInformation: string;
 	isNameBeingEdited?: boolean;
@@ -36,44 +36,48 @@ const FileLine = ({
 }: Props) => {
 	const [newName, setNewName] = useState(name);
 
-	const getIcon = (url: string) => {
+	const getIcon = (url: string, className: string) => {
 		const lastDotIndex = url.lastIndexOf('.');
 		const extension = lastDotIndex === -1 ? '' : url.slice(lastDotIndex + 1);
 
-		if (extension === 'pdf') return <PDFIcon />;
-		if (['png', 'jpg', 'jpeg', 'gif'].includes(extension)) return <ImageIcon />;
-		if (['xls', 'xlsx'].includes(extension)) return <ExcelIcon />;
+		if (extension === 'pdf') return <PDFIcon className={className} />;
+		if (['png', 'jpg', 'jpeg', 'gif'].includes(extension))
+			return <ImageIcon className={className} />;
+		if (['xls', 'xlsx'].includes(extension)) return <ExcelIcon className={className} />;
 
-		return <FileIcon />;
+		return <FileIcon className={className} />;
 	};
-
 	return (
-		<div className="flex items-center gap-7 h-12 px-3 bg-neutral-lighter hover:bg-light-blue/20">
-			{getIcon(url)}
-
-			<div className="flex-1 truncate">
-				{isNameBeingEdited ? (
-					<input
-						type="text"
-						value={newName}
-						onChange={(e) => setNewName(e.target.value)}
-						onBlur={() => handleNameChange(newName)}
-						className="flex-1 border rounded px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 w-full"
-					/>
-				) : (
-					<span className="flex-1" title={name}>
-						{name}
-					</span>
-				)}
+		<div className="grid grid-cols-5-1-1-1 hover:bg-light-blue/20 h-12 items-center w-full px-3">
+			<div className="flex gap-7 col-span-1">
+				{getIcon(url, 'col-span-1 w-6 h-6')}
+				<div className="flex gap-4">
+					<button onClick={handlePinClick}>
+						{isPinned ? <PinIconFull /> : <PinIconEmpty />}
+					</button>
+					<div className="flex-1 truncate max-w-md">
+						{isNameBeingEdited ? (
+							<input
+								type="text"
+								value={newName}
+								onChange={(e) => setNewName(e.target.value)}
+								onBlur={() => handleNameChange(newName)}
+								className="border rounded px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 w-full"
+							/>
+						) : (
+							name
+						)}
+					</div>
+				</div>
 			</div>
-			<button onClick={handlePinClick}>{isPinned ? <PinIconFull /> : <PinIconEmpty />}</button>
-
-			<span>{date}</span>
-			<span>{additionalInformation}</span>
-			<a href={url} download>
-				<DownloadIcon />
-			</a>
-			{options.length && <Options options={options} />}
+			<div className="col-span-1">{date.toDateString()}</div>
+			<div className="col-span-1">{additionalInformation}</div>
+			<div className="col-span-1 flex gap-4">
+				<a href={url} download>
+					<DownloadIcon />
+				</a>
+				{options.length && <Options options={options} />}
+			</div>
 		</div>
 	);
 };

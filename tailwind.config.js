@@ -25,6 +25,9 @@ module.exports = {
 				'action-basic': '#F3EEEB',
 				'action-hover': '#E8E0DC',
 			},
+			gridTemplateColumns: {
+				'5-1-1-1': '5fr 1fr 1fr 1fr',
+			},
 			backgroundImage: {
 				authentication: 'url(\'assets/images/background_login.png\')',
 			},
