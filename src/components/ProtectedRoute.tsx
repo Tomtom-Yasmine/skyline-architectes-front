@@ -1,6 +1,7 @@
 import React from 'react';
 import useAuth from 'hooks/useAuth';
-import { Outlet, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import Layout from './Layout';
 
 const ProtectedRoute = () => {
 	const auth = useAuth();
@@ -13,7 +14,7 @@ const ProtectedRoute = () => {
 				}}
 			/>
 		);
-	return <Outlet />;
+	return <Layout />;
 };
 
 export default ProtectedRoute;
