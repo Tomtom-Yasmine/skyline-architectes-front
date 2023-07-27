@@ -1,8 +1,8 @@
-name: deploy
+name: test and deploy
 on:
   push:
     branches: 
-      - master
+      - main 
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -11,6 +11,6 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
-          username: enta12
-          host: ligne7.pepintrie.fr
-          command : ls
+          username: ${{ secrets.USERNAME }} 
+          host: ${{ secrets.SERVER }} 
+          command : cd ergosophro && ./deploy.sh
