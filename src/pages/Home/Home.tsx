@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, FileLine, UploadFile } from 'components';
+import { Button, FileLine, FileUpload } from 'components';
 import { FilesArrayHeader } from 'components';
 import { toast } from 'react-toastify';
 import FileFilters from './FilesFilters';
@@ -248,7 +248,7 @@ const Home = () => {
 				</div>
 			</div>
 			<div className="flex items-center w-full p-4 bg-neutral-light rounded-3xl gap-8">
-				<UploadFile file={newFile} onFileChange={setNewFile} />
+				<FileUpload file={newFile} onFileChange={setNewFile} />
 				<div className="flex flex-col justify-between h-20">
 					{newFile && (
 						<span className="text-neutral-dark text-lg">

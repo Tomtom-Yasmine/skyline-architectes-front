@@ -4,6 +4,6 @@ export { default as Radio } from './Form/Radio';
 export { default as StockageSelector } from './Form/StockageSelector';
 export { default as FileLine } from './FileLine';
 export { default as FilesArrayHeader } from './FilesArrayHeader';
-export { default as UploadFile } from './UploadFile';
+export { default as FileUpload } from './FileUpload';
 export { default as Tabs } from './Tabs';
 export { default as ProtectedRoute } from './ProtectedRoute';
