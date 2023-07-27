@@ -8,12 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: echo ${{ secrets.USERNAME }} ${{ secrets.SERVER }}
       - name: SSH
         uses: garygrossgarten/github-action-ssh@release
         with:
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
-          username: ${{ secrets.USERNAME }} 
-          host: ${{ secrets.SERVER }} 
+          username: enta12
+          host: ligne7.pepintrie.fr
           command : ls
