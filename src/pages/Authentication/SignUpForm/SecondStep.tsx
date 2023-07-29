@@ -1,8 +1,7 @@
 import React from 'react';
-import { Input, Button } from 'components';
+import { Input, Button, SectionTitle } from 'components';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import SectionTitle from './SectionTitle';
 import { SignUpDataSecondStep } from 'data.type';
 
 type Props = {
@@ -43,7 +42,7 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 				{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
 					<form onSubmit={handleSubmit} className="flex flex-col gap-7">
 						<div className="flex flex-col gap-3">
-							<SectionTitle title="Informations de l'entreprise" />
+							<SectionTitle title="Informations de l'entreprise" style="light" />
 							<Input
 								category="authentication"
 								label="Nom de l'entreprise"
@@ -66,7 +65,7 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 							/>
 						</div>
 						<div className="flex flex-col gap-3">
-							<SectionTitle title="Adresse postale de l'entreprise" />
+							<SectionTitle title="Adresse postale de l'entreprise" style="light" />
 							<div className="flex gap-4">
 								<Input
 									category="authentication"

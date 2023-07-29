@@ -1,6 +1,7 @@
 import { Tabs } from 'components';
 import React, { useEffect, useState } from 'react';
 import Storage from './Storage';
+import PersonalInformations from './PersonalInformations';
 
 const createTabs = [
 	{
@@ -46,6 +47,7 @@ const MyAccount = () => {
 			{currentTab === 'storageOffer' && (
 				<Storage stockageTotal={userInfo.stockageTotal} stockageUsed={userInfo.stockageUsed} />
 			)}
+			{currentTab === 'personalInformations' && <PersonalInformations />}
 		</main>
 	);
 };

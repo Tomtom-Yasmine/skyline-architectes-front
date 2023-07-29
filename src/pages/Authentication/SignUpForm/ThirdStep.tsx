@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Input, Button, StockageSelector, Radio } from 'components';
+import { Input, Button, StockageSelector, Radio, SectionTitle } from 'components';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import SectionTitle from './SectionTitle';
 import { SignUpDataThirdStep } from 'data.type';
 
 type Props = {
@@ -49,11 +48,11 @@ const SecondStep = ({ onSubmit: handleSubmit }: Props) => {
 				{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
 					<form onSubmit={handleSubmit} className="flex flex-col gap-7">
 						<div className="flex flex-col gap-3">
-							<SectionTitle title="Offre de stockage" />
+							<SectionTitle title="Offre de stockage" style="light" />
 							<StockageSelector currentStockage={stockage} onStockageChange={setStockage} />
 						</div>
 						<div className="flex flex-col gap-3">
-							<SectionTitle title="Paiement" />
+							<SectionTitle title="Paiement" style="light" />
 							<Radio elements={paymentRadioData} name="payment" />
 							<Input
 								category="authentication"

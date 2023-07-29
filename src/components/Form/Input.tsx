@@ -5,12 +5,12 @@ import Error from './Error';
 import { ErrorMessage } from 'formik';
 
 type Props = ComponentPropsWithoutRef<'input'> & {
-	category: 'authentication' | 'form';
+	category?: 'authentication' | 'form';
 	label: string;
 };
 
 const Input = ({
-	category,
+	category = 'form',
 	label,
 	name,
 	placeholder,

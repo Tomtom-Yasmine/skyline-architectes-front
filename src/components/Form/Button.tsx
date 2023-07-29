@@ -18,7 +18,11 @@ const Button = ({ onClick, children, className, ...props }: Props) => {
 		<button
 			className={cn(
 				'rounded-3xl bg-azul-300 text-neutral-white py-2 hover:bg-azul-100 drop-shadow-sm',
-				className
+				className,
+				{
+					'bg-azul-300 hover:bg-azul-100': props.category === 'primary',
+					'bg-red-500 hover:bg-red-800': props.category === 'alert',
+				}
 			)}
 			onClick={handleChange}
 			{...props}
