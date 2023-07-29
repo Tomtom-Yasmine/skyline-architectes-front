@@ -16,7 +16,7 @@ type Props = {
 	url: string;
 	additionalInformation: string;
 	isNameBeingEdited?: boolean;
-	onNameChange: (name: string) => void;
+	onNameChange?: (name: string) => void;
 	onPinClick: () => void;
 	options?: Array<{
 		label: string;
@@ -64,7 +64,7 @@ const FileLine = ({
 								type="text"
 								value={newName}
 								onChange={(e) => setNewName(e.target.value)}
-								onBlur={() => handleNameChange(newName)}
+								onBlur={() => handleNameChange?.(newName)}
 								className="border rounded px-2 py-1 focus:outline-none focus:ring focus:border-blue-300 w-full"
 							/>
 						) : (

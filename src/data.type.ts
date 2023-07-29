@@ -51,3 +51,12 @@ export type FileData = {
 	isEditing: boolean;
 	url: string;
 };
+
+export type InvoiceData = {
+	id: string;
+	name: string;
+	creationDate: Date;
+	isPinned: boolean;
+	price: number;
+	url: string;
+};
