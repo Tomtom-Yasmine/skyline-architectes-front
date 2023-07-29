@@ -5,9 +5,9 @@ import FirstStep from './FirstStep';
 import SecondStep from './SecondStep';
 import ThirdStep from './ThirdStep';
 import { SignUpDataFirstStep, SignUpDataSecondStep, SignUpDataThirdStep } from 'data.type';
-import axios from 'axios';
 import useAuth from 'hooks/useAuth';
 import { toast } from 'react-toastify';
+import useApi from 'hooks/useApi';
 
 type Props = {
 	onLoginClick: () => void;
@@ -19,6 +19,7 @@ const NUMBER_OF_STEPS = 3;
 
 const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 	const auth = useAuth();
+	const api = useApi();
 	const [step, setStep] = useState(0);
 	const [data, setData] = useState<SignUpData>();
 
@@ -27,7 +28,7 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 		if (stepNumber + 1 === NUMBER_OF_STEPS) {
 			console.log('data', data);
 			try {
-				const res = await axios.post('http://localhost:3001/signup', data);
+				const res = await api.post('/signup', data);
 				const { sessionToken: jwt } = res.data;
 				auth?.dispatch({
 					type: 'login',

@@ -1,57 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Button, Input, SectionTitle } from 'components';
+import { User } from 'data.type';
+import useApi from 'hooks/useApi';
+import { toast } from 'react-toastify';
 
 const PeronalInformations = () => {
-	const initialValues = {
-		lastName: 'LastName',
-		firstName: 'FirstName',
-		email: 'Email',
-		phoneNumber: 'PhoneNumber',
-		companyName: 'CompanyName',
-		companySiret: 'CompanySiret',
-		companyAddressNumber: 'CompanyAddressNumber',
-		companyAddressStreet: 'CompanyAddressStreet',
-		companyAddressAdditional: 'CompanyAddressAdditional',
-		companyAddressCity: 'CompanyAddressCity',
-		companyAddressZipCode: 'CompanyAddressZipCode',
-		companyAddressCountry: 'CompanyAddressCountry',
-	};
+	const [userInfo, setUserInfo] = useState<Partial<Omit<User, 'id'>>>({});
+	const api = useApi();
 
-	const schema = Yup.object().shape({
-		lastName: Yup.string().min(2).max(50).required(),
-		firstName: Yup.string().min(2).max(50).required(),
-		email: Yup.string().min(2).max(50).required(),
-		phoneNumber: Yup.string().min(2).max(50).required(),
-		companyName: Yup.string().min(2).max(50).required(),
-		companySiret: Yup.string().min(2).max(50).required(),
-		companyAddressNumber: Yup.string().min(2).max(50).required(),
-		companyAddressStreet: Yup.string().min(2).max(50).required(),
-		companyAddressAdditional: Yup.string().min(2).max(50).required(),
-		companyAddressCity: Yup.string().min(2).max(50).required(),
-		companyAddressZipCode: Yup.string().min(2).max(50).required(),
-		companyAddressCountry: Yup.string().min(2).max(50).required(),
+	useEffect(() => {
+		api.get<{ user: User }>('/me')
+			.then((res) => {
+				const user = res.data.user;
+				if (!user) throw new Error('No user data');
+				const { id, ...userinfo } = user;
+				id && setUserInfo(userinfo);
+			})
+			.catch(() => {
+				toast.error('Erreur lors de la récupération des informations personnelles');
+			});
+	}, [api]);
+
+	const passwordsSchema = Yup.object().shape({
+		currentPassword: Yup.string().min(2).max(50).required(),
+		newPassword: Yup.string().min(2).max(50).required(),
+		confirmPassword: Yup.string()
+			.min(2)
+			.max(50)
+			.required()
+			.test(
+				'passwords-match',
+				'Les mots de passe ne correspondent pas',
+				(value, { parent }) => value === parent.newPassword
+			),
 	});
+
+	const handleDelete = async () => {
+		try {
+			await api.delete('/me');
+			toast.success('Compte supprimé');
+		} catch (e) {
+			toast.error('Erreur lors de la suppression du compte');
+		}
+	};
 
 	return (
 		<div className="flex gap-16">
 			<Formik
-				initialValues={initialValues}
-				validationSchema={schema}
+				initialValues={userInfo}
 				onSubmit={async (values, { setSubmitting }) => {
 					try {
-						console.log(values, setSubmitting);
-						//const res = await axios.post('http://localhost:3001/login', values);
-						//const { sessionToken: jwt } = res.data;
-						/*auth?.dispatch({
-                            type: 'login',
-                            payload: { jwt, onLogin: () => console.log('Login') },
-                        });
-                        toast.success(`Login réussi ${values.email}`);
-                        setSubmitting(false); */
+						setSubmitting(true);
+						console.log(values);
+						await api.patch('/me', userInfo);
+						toast.success('Informations personnelles mises à jour');
+						setSubmitting(false);
 					} catch (e) {
-						///toast.error('Couple mot de passe/identifiant incorrect');
+						toast.error('Couple mot de passe/identifiant incorrect');
 					}
 				}}
 			>
@@ -66,6 +73,8 @@ const PeronalInformations = () => {
 									placeholder="NOM"
 									type="text"
 									className="grow"
+									value={userInfo?.lastName ?? ''}
+									onChange={(e) => setUserInfo({ ...userInfo, lastName: e.target.value })}
 								/>
 								<Input
 									label="Prénom"
@@ -73,6 +82,8 @@ const PeronalInformations = () => {
 									placeholder="Prénom"
 									type="text"
 									className="grow"
+									value={userInfo?.firstName ?? ''}
+									onChange={(e) => setUserInfo({ ...userInfo, firstName: e.target.value })}
 								/>
 							</div>
 							<Input
@@ -80,12 +91,16 @@ const PeronalInformations = () => {
 								name="email"
 								placeholder="test@gmail.com"
 								type="text"
+								value={userInfo?.email ?? ''}
+								onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
 							/>
 							<Input
 								label="Numéro de téléphone"
 								name="phoneNumber"
 								placeholder="06 00 00 00 00"
 								type="text"
+								value={userInfo?.phoneNumber ?? ''}
+								onChange={(e) => setUserInfo({ ...userInfo, phoneNumber: e.target.value })}
 							/>
 						</div>
 
@@ -96,12 +111,16 @@ const PeronalInformations = () => {
 								name="companyName"
 								placeholder="Company ..."
 								type="text"
+								value={userInfo?.companyName ?? ''}
+								onChange={(e) => setUserInfo({ ...userInfo, companyName: e.target.value })}
 							/>
 							<Input
 								label="Numéro de SIRET"
 								name="companySiret"
 								placeholder="34....."
 								type="text"
+								value={userInfo?.companySiret ?? ''}
+								onChange={(e) => setUserInfo({ ...userInfo, companySiret: e.target.value })}
 							/>
 							<div className="flex gap-2">
 								<Input
@@ -109,6 +128,10 @@ const PeronalInformations = () => {
 									name="companyAddressNumber"
 									placeholder="4"
 									type="text"
+									value={userInfo?.companyAddressNumber ?? ''}
+									onChange={(e) =>
+										setUserInfo({ ...userInfo, companyAddressNumber: e.target.value })
+									}
 								/>
 								<Input
 									label="Voie"
@@ -116,6 +139,10 @@ const PeronalInformations = () => {
 									placeholder="rue de la Paix"
 									type="text"
 									className="grow"
+									value={userInfo?.companyAddressStreet ?? ''}
+									onChange={(e) =>
+										setUserInfo({ ...userInfo, companyAddressStreet: e.target.value })
+									}
 								/>
 							</div>
 							<Input
@@ -123,6 +150,10 @@ const PeronalInformations = () => {
 								name="companyAddressAdditional"
 								placeholder="Immeuble B, étage 2, porte 4"
 								type="text"
+								value={userInfo?.companyAddressAdditional ?? ''}
+								onChange={(e) =>
+									setUserInfo({ ...userInfo, companyAddressAdditional: e.target.value })
+								}
 							/>
 							<div className="flex flex-col gap-2">
 								<Input
@@ -130,6 +161,10 @@ const PeronalInformations = () => {
 									name="companyAddressCity"
 									placeholder="Paris"
 									type="text"
+									value={userInfo?.companyAddressCity ?? ''}
+									onChange={(e) =>
+										setUserInfo({ ...userInfo, companyAddressCity: e.target.value })
+									}
 								/>
 								<Input
 									label="Code postal"
@@ -137,6 +172,10 @@ const PeronalInformations = () => {
 									placeholder="75000"
 									type="text"
 									className="grow"
+									value={userInfo?.companyAddressZipCode ?? ''}
+									onChange={(e) =>
+										setUserInfo({ ...userInfo, companyAddressZipCode: e.target.value })
+									}
 								/>
 							</div>
 							<Input
@@ -145,6 +184,10 @@ const PeronalInformations = () => {
 								placeholder="France"
 								type="text"
 								className="grow"
+								value={userInfo?.companyAddressCountry ?? ''}
+								onChange={(e) =>
+									setUserInfo({ ...userInfo, companyAddressCountry: e.target.value })
+								}
 							/>
 						</div>
 						<Button category="primary" type="submit" disabled={isSubmitting}>
@@ -160,24 +203,18 @@ const PeronalInformations = () => {
 						newPassword: '',
 						confirmPassword: '',
 					}}
-					validationSchema={schema}
+					validationSchema={passwordsSchema}
 					onSubmit={async (values, { setSubmitting }) => {
 						try {
-							console.log(values, setSubmitting);
-							//const res = await axios.post('http://localhost:3001/login', values);
-							//const { sessionToken: jwt } = res.data;
-							/*auth?.dispatch({
-                                type: 'login',
-                                payload: { jwt, onLogin: () => console.log('Login') },
-                            });
-                            toast.success(`Login réussi ${values.email}`);
-                            setSubmitting(false); */
+							await api.post('/update-password', values);
+							toast.success('Mot de passe mis à jour');
+							setSubmitting(false);
 						} catch (e) {
-							///toast.error('Couple mot de passe/identifiant incorrect');
+							toast.error('Couple mot de passe/identifiant incorrect');
 						}
 					}}
 				>
-					{({ handleSubmit, isSubmitting }) => (
+					{({ handleSubmit, isSubmitting, values, handleChange }) => (
 						<form onSubmit={handleSubmit} className="flex flex-col gap-12">
 							<div className="flex flex-col gap-4">
 								<SectionTitle title="Mot de passe" />
@@ -186,18 +223,24 @@ const PeronalInformations = () => {
 									name="currentPassword"
 									placeholder="MonMotDePasseActuel"
 									type="password"
+									value={values.currentPassword}
+									onChange={handleChange}
 								/>
 								<Input
 									label="Nouveau mot de passe"
 									name="newPassword"
 									placeholder="MonNouveauMotDePasse"
 									type="password"
+									value={values.newPassword}
+									onChange={handleChange}
 								/>
 								<Input
 									label="Nouveau mot de passe"
 									name="confirmPassword"
 									placeholder="MonNouveauMotDePasse"
 									type="password"
+									value={values.confirmPassword}
+									onChange={handleChange}
 								/>
 							</div>
 							<Button category="primary" type="submit" disabled={isSubmitting}>
@@ -206,7 +249,9 @@ const PeronalInformations = () => {
 						</form>
 					)}
 				</Formik>
-				<Button category="alert">Suprimer mon compte</Button>
+				<Button category="alert" onClick={handleDelete}>
+					Suprimer mon compte
+				</Button>
 			</div>
 		</div>
 	);

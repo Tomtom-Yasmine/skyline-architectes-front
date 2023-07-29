@@ -1,6 +1,18 @@
 export type User = {
+	id: string;
 	email: string;
 	role: Role;
+	lastName: string;
+	firstName: string;
+	phoneNumber: string;
+	companyName: string;
+	companySiret: string;
+	companyAddressNumber: string;
+	companyAddressStreet: string;
+	companyAddressAdditional: string;
+	companyAddressCity: string;
+	companyAddressZipCode: string;
+	companyAddressCountry: string;
 };
 
 type Role = 'user' | 'admin';

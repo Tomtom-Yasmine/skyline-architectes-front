@@ -1,10 +1,10 @@
 import React from 'react';
 import { Input, Button } from 'components';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
 import { Formik } from 'formik';
+import useApi from 'hooks/useApi';
 
 type Props = {
 	onFormChange: (value: string) => void;
@@ -17,6 +17,7 @@ const LoginSchema = Yup.object().shape({
 
 const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 	const auth = useAuth();
+	const api = useApi();
 
 	return (
 		<Formik
@@ -24,7 +25,7 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 			validationSchema={LoginSchema}
 			onSubmit={async (values, { setSubmitting }) => {
 				try {
-					const res = await axios.post('http://localhost:3001/login', values);
+					const res = await api.post('/login', values);
 					const { sessionToken: jwt } = res.data;
 					auth?.dispatch({
 						type: 'login',

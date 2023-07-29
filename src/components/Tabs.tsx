@@ -16,7 +16,7 @@ const Tabs = ({ tabItems, currentTab, onTabClick: handleTabClick }: Props) => {
 						'text-azul-100': currentTab === tab.name,
 						'text-neutral-grey hover:text-neutral-600': currentTab !== tab.name,
 					})}
-					key="tab.name"
+					key={tab.name}
 				>
 					{tab.label}
 				</button>
