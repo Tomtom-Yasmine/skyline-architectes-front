@@ -6,5 +6,7 @@ export { default as FileLine } from './FileLine';
 export { default as FilesArrayHeader } from './FilesArrayHeader';
 export { default as FileUpload } from './FileUpload';
 export { default as Tabs } from './Tabs';
+export { default as PayButton } from './PaymentForm/PayButton';
+export { default as CheckoutSuccess } from './PaymentForm/CheckoutSuccess';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as SectionTitle } from './SectionTitle';
