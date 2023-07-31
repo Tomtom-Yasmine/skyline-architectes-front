@@ -36,7 +36,7 @@ const Storage = () => {
 					/>
 				</div>
 			</div>
-			<div className="flex row">
+			<div className="flex row justify-center">
 				<div className="flex flex-col gap-3">
 					<h3 className="text-azul-300 text-3xl">Achat de stockage supplémentaire</h3>
 					<StockageSelector
@@ -45,9 +45,8 @@ const Storage = () => {
 						onLightBackground
 					/>
 				</div>
-				<div className="flex flex-col gap-3 w-300"> </div>
 			</div>
-			<PayButton storage={newStockage} />
+			<PayButton storage={newStockage} className="w-4/12 mx-auto" />
 		</div>
 	);
 };

@@ -5,7 +5,6 @@ import Authentication from 'pages/Authentication/Authentication';
 import { ProtectedRoute } from 'components';
 import Home from 'pages/Home/Home';
 import MyAccount from 'pages/MyAccount/MyAccount';
-import CheckoutSuccess from 'components/PaymentForm/CheckoutSuccess';
 
 //TODO : import lazy
 const router = createBrowserRouter([
@@ -20,7 +19,6 @@ const router = createBrowserRouter([
 			{ index: true, element: <Home /> },
 			{ path: 'myaccount', element: <MyAccount /> },
 			{ path: 'dashboard', element: <div>Dashboard</div> },
-			{ path: 'checkout-success', element: <CheckoutSuccess /> },
 		],
 	},
 ]);
