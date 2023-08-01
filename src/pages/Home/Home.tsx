@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, FileLine, FileUpload } from 'components';
 import { FilesArrayHeader } from 'components';
 import { toast } from 'react-toastify';
@@ -173,7 +173,11 @@ const Home = () => {
 		setFilters(filters.map((filter) => filter.value));
 	};
 
-	console.log(files);
+	useEffect(() => {
+		const queryParams = new URLSearchParams(location.search);
+		const success = queryParams.get('success');
+		if (success === 'false') toast.error('Erreur lors du paiement');
+	}, []);
 
 	return (
 		<main className="bg-neutral-white  gap-12 flex flex-col">

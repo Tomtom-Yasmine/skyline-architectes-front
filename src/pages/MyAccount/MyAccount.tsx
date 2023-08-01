@@ -30,7 +30,6 @@ const MyAccount = () => {
 		const success = queryParams.get('success');
 		if (tabValue) setCurrentTab(tabValue);
 		if (success) toast.success('Votre paiement a été effectué avec succès !');
-		console.log('success', success);
 	}, []);
 
 	//eslint-disable-next-line @typescript-eslint/no-unused-vars

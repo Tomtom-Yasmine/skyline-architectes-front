@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { Button } from 'components';
 import React from 'react';
+import { Button } from 'components';
+import { useApi } from 'hooks';
+import { toast } from 'react-toastify';
 
 type Props = {
 	storage: number;
@@ -8,22 +9,26 @@ type Props = {
 };
 
 const PayButton = ({ storage, className }: Props) => {
+	const api = useApi();
 	const url = process.env.REACT_APP_API_BASE_URL;
 
 	const handleCheckout = () => {
-		axios
-			.post(`${url}stripe/create-checkout-session`, {
-				data: { amount: storage, price: 20 },
-			})
+		api.post(`${url}stripe/create-checkout-session`, {
+			data: {
+				amount: storage,
+				price: 20,
+				urlSuccess: '/myaccount?tab=invoices&success=true',
+				urlFailure: '/myaccount?tab=storageOffer',
+			},
+		})
 			.then((res) => {
 				if (res.data.url) {
 					window.location.href = res.data.url;
 				}
 			})
-			.catch((err) => {
-				console.log(err.message);
+			.catch(() => {
+				toast.error('Une erreur est survenue');
 			});
-		console.log(storage);
 	};
 	return (
 		<Button

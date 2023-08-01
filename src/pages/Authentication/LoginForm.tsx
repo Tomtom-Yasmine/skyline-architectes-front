@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
 import { Formik } from 'formik';
 import useApi from 'hooks/useApi';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
 	onFormChange: (value: string) => void;
@@ -18,6 +19,7 @@ const LoginSchema = Yup.object().shape({
 const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 	const auth = useAuth();
 	const api = useApi();
+	const navigate = useNavigate();
 
 	return (
 		<Formik
@@ -29,7 +31,7 @@ const LoginForm = ({ onFormChange: handleFormChange }: Props) => {
 					const { sessionToken: jwt } = res.data;
 					auth?.dispatch({
 						type: 'login',
-						payload: { jwt, onLogin: () => console.log('Login') },
+						payload: { jwt, onLogin: () => navigate('/') },
 					});
 					toast.success(`Login réussi ${values.email}`);
 					setSubmitting(false);

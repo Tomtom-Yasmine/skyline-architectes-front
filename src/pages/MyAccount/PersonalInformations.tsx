@@ -53,7 +53,6 @@ const PeronalInformations = () => {
 				onSubmit={async (values, { setSubmitting }) => {
 					try {
 						setSubmitting(true);
-						console.log(values);
 						await api.patch('/me', userInfo);
 						toast.success('Informations personnelles mises à jour');
 						setSubmitting(false);
