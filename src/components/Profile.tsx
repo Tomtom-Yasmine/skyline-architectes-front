@@ -12,7 +12,7 @@ const Profile = () => {
 			name: 'Personal Information',
 			label: 'Informations personnelles',
 			onClick: () => {
-				window.open('/myaccount?tab=invoices');
+				window.open('/myaccount?tab=personalInformations');
 			},
 		},
 		{
