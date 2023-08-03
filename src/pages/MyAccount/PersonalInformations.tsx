@@ -5,11 +5,12 @@ import { Button, Input, SectionTitle } from 'components';
 import { User } from 'data.type';
 import useApi from 'hooks/useApi';
 import { toast } from 'react-toastify';
+import { useAuth } from 'hooks';
 
 const PeronalInformations = () => {
 	const [userInfo, setUserInfo] = useState<Partial<Omit<User, 'id'>>>({});
 	const api = useApi();
-
+	const auth = useAuth();
 	useEffect(() => {
 		api.get<{ user: User }>('/me')
 			.then((res) => {
@@ -41,6 +42,7 @@ const PeronalInformations = () => {
 		try {
 			await api.delete('/me');
 			toast.success('Compte supprimé');
+			auth?.dispatch({ type: 'logout' });
 		} catch (e) {
 			toast.error('Erreur lors de la suppression du compte');
 		}
