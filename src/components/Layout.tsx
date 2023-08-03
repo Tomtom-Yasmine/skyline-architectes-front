@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import React from 'react';
+import { Profile } from 'components';
 
 const Layout = () => {
 	return (
@@ -12,6 +13,7 @@ const Layout = () => {
 			</div>
 			<div className="w-full">
 				<header className="w-full h-24">TODO HEADER</header>
+				<Profile />
 				<Outlet />
 			</div>
 		</div>
