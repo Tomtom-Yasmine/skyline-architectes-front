@@ -50,7 +50,7 @@ const Profile = () => {
 				<div className="absolute flex flex-col justify-center align-middle bg-neutral-light rounded-3xl drop-shadow-md right-0 top-12 w-64">
 					<div className="flex justify-center align-middle p-2">
 						<img className="rounded-full w-20 h-20" src={defaultImage} />
-						{/* {auth.info.user} */}
+						{/* TO DO : add user name*/}
 					</div>
 					<div className="flex flex-col p-3 gap-2">
 						{options.map((option) => (
