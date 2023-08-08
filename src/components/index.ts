@@ -9,3 +9,4 @@ export { default as Tabs } from './Tabs';
 export { default as PayButton } from './PaymentForm/PayButton';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as SectionTitle } from './SectionTitle';
+export { default as Profile } from './Profile';
