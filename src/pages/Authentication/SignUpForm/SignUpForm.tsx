@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'yup-phone';
 import Step from './Step';
 import FirstStep from './FirstStep';
 import SecondStep from './SecondStep';
 import ThirdStep from './ThirdStep';
 import { SignUpDataFirstStep, SignUpDataSecondStep, SignUpDataThirdStep } from 'data.type';
-import axios from 'axios';
 import useAuth from 'hooks/useAuth';
 import { toast } from 'react-toastify';
+import useApi from 'hooks/useApi';
+import { useLocation } from 'react-router-dom';
 
 type Props = {
 	onLoginClick: () => void;
@@ -19,19 +20,49 @@ const NUMBER_OF_STEPS = 3;
 
 const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 	const auth = useAuth();
+	const api = useApi();
 	const [step, setStep] = useState(0);
 	const [data, setData] = useState<SignUpData>();
+	const location = useLocation();
+
+	useEffect(() => {
+		const queryParams = new URLSearchParams(location.search);
+		const stepValue = queryParams.get('step');
+		if (stepValue) setStep(+stepValue);
+	}, []);
+	const handleCheckout = (stockage = 20) => {
+		api.post('/stripe/create-checkout-session', {
+			data: {
+				amount: stockage,
+				price: 20,
+				urlSuccess: '',
+				urlFailure: '?success=false',
+			},
+		})
+			.then((res) => {
+				if (res.data.url) {
+					window.location.href = res.data.url;
+				}
+			})
+			.catch(() => {
+				toast.error('Une erreur est survenue');
+			});
+	};
 
 	const changeStep = async (stepNumber: number, stepData: SignUpData) => {
 		setData((data) => ({ ...data, ...stepData }));
 		if (stepNumber + 1 === NUMBER_OF_STEPS) {
-			console.log('data', data);
 			try {
-				const res = await axios.post('http://localhost:3001/signup', data);
+				const res = await api.post('/signup', data);
 				const { sessionToken: jwt } = res.data;
 				auth?.dispatch({
 					type: 'login',
-					payload: { jwt, onLogin: () => console.log('Login') },
+					payload: {
+						jwt,
+						onLogin: () => {
+							handleCheckout(data?.stockage);
+						},
+					},
 				});
 				toast.success('Inscription réussie');
 			} catch (e) {

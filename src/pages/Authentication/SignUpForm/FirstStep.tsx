@@ -1,10 +1,9 @@
 import React from 'react';
-import { Input, Button } from 'components';
+import { Input, Button, SectionTitle } from 'components';
 import * as Yup from 'yup';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import 'yup-phone';
 import { Formik } from 'formik';
-import SectionTitle from './SectionTitle';
 import { SignUpDataFirstStep } from 'data.type';
 
 type Props = {
@@ -44,7 +43,7 @@ const FirstStep = ({ onLoginClick: handleLoginClick, onSubmit: handleSubmit }: P
 				{({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
 					<form onSubmit={handleSubmit} className="flex flex-col gap-7">
 						<div className="flex flex-col gap-3">
-							<SectionTitle title="Informations personnelles" />
+							<SectionTitle title="Informations personnelles" style="light" />
 							<div className="flex gap-4">
 								<Input
 									category="authentication"

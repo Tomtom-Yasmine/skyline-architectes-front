@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, FileLine, FileUpload } from 'components';
 import { FilesArrayHeader } from 'components';
 import { toast } from 'react-toastify';
@@ -148,15 +148,13 @@ const Home = () => {
 		column: 'name',
 	});
 
-	const handleSort = (direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') => {
-		const newFiles = files.sort((a, b) => {
-			if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
-			if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
-			return 0;
-		});
-		setFiles(newFiles);
-		setSort({ direction, column });
-	};
+	const handleSort =
+		(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
+			(a: FileData, b: FileData) => {
+				if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
+				if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
+				return 0;
+			};
 
 	const getFilteredFiles = () => {
 		if (filters.length === 0) return files;
@@ -175,12 +173,15 @@ const Home = () => {
 		setFilters(filters.map((filter) => filter.value));
 	};
 
-	console.log(filters);
+	useEffect(() => {
+		const queryParams = new URLSearchParams(location.search);
+		const success = queryParams.get('success');
+		if (success === 'false') toast.error('Erreur lors du paiement');
+	}, []);
 
 	return (
 		<main className="bg-neutral-white  gap-12 flex flex-col">
 			<div className="flex gap-4 rounded-3xl bg-neutral-light p-4 w-full overflow-hidden">
-				{' '}
 				{/* TODO add a hidden scrollbar */}
 				{files
 					.filter((file) => file.isPinned)
@@ -222,29 +223,31 @@ const Home = () => {
 						},
 					]}
 					onSortChange={(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
-						handleSort(direction, column)
+						setSort({ direction, column })
 					}
 				/>
 
 				<div className="bg-neutral-lighter w-full flex flex-col items-center ">
-					{getFilteredFiles().map((file, index) => (
-						<React.Fragment key={file.id}>
-							<FileLine
-								name={file.name}
-								isNameBeingEdited={file.isEditing}
-								isPinned={file.isPinned}
-								date={file.creationDate}
-								url={file.url}
-								additionalInformation={`${file.size} Mo`}
-								options={createOptions(file.id)}
-								onNameChange={handleNameChange(file.id)}
-								onPinClick={handlePinClick(file.id)}
-							/>
-							{files.length - 1 !== index && (
-								<div className="border-b border-neutral-light w-[98%]" />
-							)}
-						</React.Fragment>
-					))}
+					{[...getFilteredFiles()]
+						.sort(handleSort(sort.direction, sort.column))
+						.map((file, index) => (
+							<React.Fragment key={file.id}>
+								<FileLine
+									name={file.name}
+									isNameBeingEdited={file.isEditing}
+									isPinned={file.isPinned}
+									date={file.creationDate}
+									url={file.url}
+									additionalInformation={`${file.size} Mo`}
+									options={createOptions(file.id)}
+									onNameChange={handleNameChange(file.id)}
+									onPinClick={handlePinClick(file.id)}
+								/>
+								{files.length - 1 !== index && (
+									<div className="border-b border-neutral-light w-[98%]" />
+								)}
+							</React.Fragment>
+						))}
 				</div>
 			</div>
 			<div className="flex items-center w-full p-4 bg-neutral-light rounded-3xl gap-8">

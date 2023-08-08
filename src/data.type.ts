@@ -1,6 +1,18 @@
 export type User = {
+	id: string;
 	email: string;
 	role: Role;
+	lastName: string;
+	firstName: string;
+	phoneNumber: string;
+	companyName: string;
+	companySiret: string;
+	companyAddressNumber: string;
+	companyAddressStreet: string;
+	companyAddressAdditional: string;
+	companyAddressCity: string;
+	companyAddressZipCode: string;
+	companyAddressCountry: string;
 };
 
 type Role = 'user' | 'admin';
@@ -37,5 +49,14 @@ export type FileData = {
 	id: string;
 	isPinned: boolean;
 	isEditing: boolean;
+	url: string;
+};
+
+export type InvoiceData = {
+	id: string;
+	name: string;
+	creationDate: Date;
+	isPinned: boolean;
+	price: number;
 	url: string;
 };

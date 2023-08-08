@@ -5,18 +5,20 @@ import Error from './Error';
 import { ErrorMessage } from 'formik';
 
 type Props = ComponentPropsWithoutRef<'input'> & {
-	category: 'authentication' | 'form';
+	category?: 'authentication' | 'form';
 	label: string;
+	controlled?: boolean;
 };
 
 const Input = ({
-	category,
+	category = 'form',
 	label,
 	name,
 	placeholder,
 	value,
 	type = 'text',
 	className,
+	controlled = false,
 	...props
 }: Props) => {
 	return (
@@ -41,7 +43,7 @@ const Input = ({
 				name={name}
 				{...props}
 			/>
-			<ErrorMessage name={name} component={Error} />
+			{!controlled && <ErrorMessage name={name} component={Error} />}
 		</div>
 	);
 };
