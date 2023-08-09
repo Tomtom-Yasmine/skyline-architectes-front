@@ -14,12 +14,10 @@ const PayButton = ({ storage, className }: Props) => {
 
 	const handleCheckout = () => {
 		api.post(`${url}stripe/create-checkout-session`, {
-			data: {
-				amount: storage,
-				price: 20,
-				urlSuccess: '/myaccount?tab=invoices&success=true',
-				urlFailure: '/myaccount?tab=storageOffer',
-			},
+			amount: storage,
+			price: 20,
+			urlSuccess: '/myaccount?tab=invoices&success=true',
+			urlFailure: '/myaccount?tab=storageOffer',
 		})
 			.then((res) => {
 				if (res.data.url) {
