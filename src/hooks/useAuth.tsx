@@ -15,7 +15,7 @@ const initialState: AuthInfo = {
 
 type Action = {
 	type: 'login' | 'logout';
-	payload?: { jwt?: string; onLogin?: () => void };
+	payload?: { jwt?: string; onLogin?: (jwt: string) => void };
 };
 
 const reducer = (state: AuthInfo, action: Action) => {
@@ -25,7 +25,7 @@ const reducer = (state: AuthInfo, action: Action) => {
 		const jwt = action.payload.jwt;
 		localStorage.setItem('token', jwt);
 		const user = jwtDecode<User>(jwt);
-		if (action.payload?.onLogin) action.payload?.onLogin();
+		if (action.payload?.onLogin) action.payload?.onLogin(jwt);
 		return { jwt, user, isLogged: true };
 	}
 	case 'logout':

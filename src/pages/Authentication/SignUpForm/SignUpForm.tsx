@@ -9,6 +9,7 @@ import useAuth from 'hooks/useAuth';
 import { toast } from 'react-toastify';
 import useApi from 'hooks/useApi';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 type Props = {
 	onLoginClick: () => void;
@@ -30,15 +31,22 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 		const stepValue = queryParams.get('step');
 		if (stepValue) setStep(+stepValue);
 	}, []);
-	const handleCheckout = (stockage = 20) => {
-		api.post('/stripe/create-checkout-session', {
-			data: {
-				amount: stockage,
-				price: 20,
-				urlSuccess: '',
-				urlFailure: '?success=false',
-			},
-		})
+	const handleCheckout = (stockage = 20, jwt: string) => {
+		axios
+			.post(
+				`${process.env.REACT_APP_API_BASE_URL}stripe/create-checkout-session`,
+				{
+					amount: stockage,
+					price: 20,
+					urlSuccess: '',
+					urlFailure: '?success=false',
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${jwt}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res.data.url) {
 					window.location.href = res.data.url;
@@ -59,8 +67,8 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 					type: 'login',
 					payload: {
 						jwt,
-						onLogin: () => {
-							handleCheckout(data?.stockage);
+						onLogin: (jwt) => {
+							handleCheckout(data?.stockage, jwt);
 						},
 					},
 				});
