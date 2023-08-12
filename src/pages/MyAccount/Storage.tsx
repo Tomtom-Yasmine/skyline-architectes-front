@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PayButton, StockageSelector } from 'components';
+import { useApi } from 'hooks';
 
 type Stockage = {
 	stockageUsed: number;
@@ -7,7 +8,8 @@ type Stockage = {
 };
 
 const Storage = () => {
-	//const api = useApi();
+	const url = process.env.REACT_APP_API_BASE_URL;
+	const api = useApi();
 	const [currentStockage, setCurrentStockage] = useState<Stockage>({
 		stockageUsed: 16,
 		stockageTotal: 20,
@@ -15,10 +17,17 @@ const Storage = () => {
 	const [newStockage, setNewStockage] = useState<number>(20);
 
 	useEffect(() => {
-		console.log(setCurrentStockage);
-		//get user info
-		//api.get('/me');
-	}, []); //add api to dependency array
+		const setUser = async () => {
+			const user = await api.get(`${url}me`);
+			setCurrentStockage({
+				//TODO : get User storage used
+				// stockageUsed: user.data.user.stockageUsed,
+				stockageUsed: 16,
+				stockageTotal: user.data.user.storage,
+			});
+		};
+		setUser();
+	}, [api]);
 
 	return (
 		<div className="flex flex-col gap-24">

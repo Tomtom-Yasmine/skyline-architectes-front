@@ -99,8 +99,6 @@ const Invoices = () => {
 				setInvoices(newFiles);
 			},
 		},
-		// { label: 'Déplacer dans...', onClick: () => console.log('Déplacer dans...') },
-		// { label: 'Voir les détails', onClick: () => console.log('Voir les détails') },
 		{
 			label: 'Supprimer',
 			onClick: () => {

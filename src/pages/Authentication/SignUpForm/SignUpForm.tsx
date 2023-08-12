@@ -31,15 +31,42 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 		const stepValue = queryParams.get('step');
 		if (stepValue) setStep(+stepValue);
 	}, []);
-	const handleCheckout = (stockage = 20, jwt: string) => {
+	const handleCheckout = (jwt: string, data?: SignUpData) => {
+		if (!data) return;
+		const {
+			stockage,
+			firstName,
+			lastName,
+			companyName,
+			companySiret,
+			companyAddressNumber,
+			companyAddressStreet,
+			companyAddressAdditional,
+			companyAddressZipCode,
+			companyAddressCity,
+			companyAddressCountry,
+			phoneNumber,
+		} = data;
 		axios
 			.post(
 				`${process.env.REACT_APP_API_BASE_URL}stripe/create-checkout-session`,
 				{
 					amount: stockage,
-					price: 20,
+					price: stockage,
 					urlSuccess: '',
 					urlFailure: '?success=false',
+					metadata: {
+						name: `${firstName} ${lastName}`,
+						companySiret,
+						companyName,
+						companyAddressNumber,
+						companyAddressStreet,
+						companyAddressAdditional,
+						companyAddressZipCode,
+						companyAddressCity,
+						companyAddressCountry,
+						phoneNumber,
+					},
 				},
 				{
 					headers: {
@@ -58,7 +85,8 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 	};
 
 	const changeStep = async (stepNumber: number, stepData: SignUpData) => {
-		setData((data) => ({ ...data, ...stepData }));
+		const newData = { ...data, ...stepData };
+		setData(newData);
 		if (stepNumber + 1 === NUMBER_OF_STEPS) {
 			try {
 				const res = await api.post('/signup', data);
@@ -67,9 +95,7 @@ const SignUpForm = ({ onLoginClick: handleLoginClick }: Props) => {
 					type: 'login',
 					payload: {
 						jwt,
-						onLogin: (jwt) => {
-							handleCheckout(data?.stockage, jwt);
-						},
+						onLogin: (jwt) => handleCheckout(jwt, newData),
 					},
 				});
 				toast.success('Inscription réussie');

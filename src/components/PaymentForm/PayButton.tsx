@@ -11,13 +11,16 @@ type Props = {
 const PayButton = ({ storage, className }: Props) => {
 	const api = useApi();
 	const url = process.env.REACT_APP_API_BASE_URL;
-
-	const handleCheckout = () => {
+	const handleCheckout = async () => {
+		const user = await api.get(`${url}me`);
 		api.post(`${url}stripe/create-checkout-session`, {
 			amount: storage,
 			price: 20,
 			urlSuccess: '/myaccount?tab=invoices&success=true',
 			urlFailure: '/myaccount?tab=storageOffer',
+			metadata: {
+				...user.data.user,
+			},
 		})
 			.then((res) => {
 				if (res.data.url) {
