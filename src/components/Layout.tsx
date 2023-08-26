@@ -5,6 +5,7 @@ import { Button, Profile } from 'components';
 import { ReactComponent as Logo } from 'assets/images/logo.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file_empty.svg';
 import { ReactComponent as PinIcon } from 'assets/icons/pin_empty.svg';
+import Search from './Search';
 
 type NavItemProps = {
 	label: string;
@@ -55,6 +56,8 @@ const NavItem = ({
 
 const Layout = () => {
 	const navigate = useNavigate();
+
+	const [search, setSearch] = React.useState('');
 
 	return (
 		<div className="flex p-8 pl-80 min-h-screen">
@@ -109,8 +112,13 @@ const Layout = () => {
 				</div>
 			</div>
 			<div className="w-full">
-				<header className="w-full h-24">TODO HEADER</header>
-				<Profile />
+				<header className="w-full h-24">
+					{/** header contains search bar and profile icon */}
+					<div className="flex justify-between items-center h-full">
+						<Search setSearch={setSearch} className="w-96 shrink" />
+						<Profile />
+					</div>
+				</header>
 				<Outlet />
 			</div>
 		</div>
