@@ -1,10 +1,43 @@
 import { Outlet, matchPath, useNavigate } from 'react-router-dom';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { Button, Profile } from 'components';
 import { ReactComponent as Logo } from 'assets/images/logo.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file_empty.svg';
 import { ReactComponent as PinIcon } from 'assets/icons/pin_empty.svg';
+import { useApi } from 'hooks';
+import { User } from 'data.type';
+
+type UserStorageProps = {
+	user?: User;
+};
+
+const UserStorage = ({ user }: UserStorageProps) => {
+	console.log({ user });
+
+	if (!user) return null;
+
+	const totalUsedSizeBytes = Math.floor(user.totalUsedSizeBytes / 1_000_000_000);
+
+	return (
+		<div className="flex flex-col gap-2">
+			<span className="text-sm text-neutral-light">Stockage</span>
+			<div className="flex flex-col gap-2">
+				<span className="text-sm text-neutral-light">
+					{totalUsedSizeBytes} Go utilisés sur {user.storage} Go
+				</span>
+				<div className="w-full bg-neutral-light">
+					<div
+						className="h-3 bg-azul-700"
+						style={{
+							width: `${(totalUsedSizeBytes / user.storage) * 100}%`,
+						}}
+					/>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 type NavItemProps = {
 	label: string;
@@ -55,6 +88,16 @@ const NavItem = ({
 
 const Layout = () => {
 	const navigate = useNavigate();
+	const api = useApi();
+
+	const [user, setUser] = useState<User | undefined>(undefined);
+
+	useEffect(() => {
+		(async () => {
+			const user = await api.get('/me');
+			setUser(user.data.user);
+		})();
+	}, [api]);
 
 	return (
 		<div className="flex p-8 pl-80 min-h-screen">
@@ -95,7 +138,7 @@ const Layout = () => {
 						icon={PinIcon}
 						outerChildren={
 							<>
-								{/** TODO: add storage bar */}
+								<UserStorage user={user} />
 								<Button
 									category={'primary'}
 									className="rounded-lg text-sm"
