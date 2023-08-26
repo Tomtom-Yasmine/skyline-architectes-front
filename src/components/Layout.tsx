@@ -1,90 +1,12 @@
 import { Outlet, matchPath, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import cn from 'classnames';
+import { NavItem, UserStorage } from 'components';
 import { Button, Profile } from 'components';
 import { ReactComponent as Logo } from 'assets/images/logo.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file_empty.svg';
 import { ReactComponent as PinIcon } from 'assets/icons/pin_empty.svg';
 import { useApi } from 'hooks';
 import { User } from 'data.type';
-
-type UserStorageProps = {
-	user?: User;
-};
-
-const UserStorage = ({ user }: UserStorageProps) => {
-	console.log({ user });
-
-	if (!user) return null;
-
-	const totalUsedSizeBytes = Math.floor(user.totalUsedSizeBytes / 1_000_000_000);
-
-	return (
-		<div className="flex flex-col gap-2">
-			<span className="text-sm text-neutral-light">Stockage</span>
-			<div className="flex flex-col gap-2">
-				<span className="text-sm text-neutral-light">
-					{totalUsedSizeBytes} Go utilisés sur {user.storage} Go
-				</span>
-				<div className="w-full bg-neutral-light">
-					<div
-						className="h-3 bg-azul-700"
-						style={{
-							width: `${(totalUsedSizeBytes / user.storage) * 100}%`,
-						}}
-					/>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-type NavItemProps = {
-	label: string;
-	icon: any;
-	onClick?: () => void;
-	isActive?: () => boolean;
-	innerChildren?: React.ReactNode;
-	outerChildren?: React.ReactNode;
-};
-
-const NavItem = ({
-	label,
-	icon: Icon,
-	onClick,
-	isActive,
-	innerChildren,
-	outerChildren,
-}: NavItemProps) => {
-	return (
-		<div className={cn('flex', 'flex-col', 'gap-2', 'w-full')}>
-			<div
-				className={cn(
-					'flex',
-					'flex-col',
-					'gap-2',
-					'text-neutral-light',
-					'rounded-lg',
-					'p-2',
-					'w-full',
-					{
-						'cursor-pointer': onClick,
-						'hover:bg-azul-300': onClick,
-						'bg-azul-100': isActive && isActive(),
-					}
-				)}
-				onClick={onClick}
-			>
-				<span className={cn('flex', 'gap-2')}>
-					<Icon className="w-6 h-6 shrink-0" />
-					<span className="text-sm font-semibold">{label}</span>
-				</span>
-				{innerChildren}
-			</div>
-			{outerChildren}
-		</div>
-	);
-};
 
 const Layout = () => {
 	const navigate = useNavigate();
