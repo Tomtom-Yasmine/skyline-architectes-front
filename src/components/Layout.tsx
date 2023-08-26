@@ -5,6 +5,7 @@ import { Button, Profile } from 'components';
 import { ReactComponent as Logo } from 'assets/images/logo.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file_empty.svg';
 import { ReactComponent as PinIcon } from 'assets/icons/pin_empty.svg';
+import Search from './Search';
 import { useApi } from 'hooks';
 import { User } from 'data.type';
 
@@ -13,6 +14,8 @@ const Layout = () => {
 	const api = useApi();
 
 	const [user, setUser] = useState<User | undefined>(undefined);
+  
+  const [search, setSearch] = React.useState('');
 
 	useEffect(() => {
 		(async () => {
@@ -74,8 +77,12 @@ const Layout = () => {
 				</div>
 			</div>
 			<div className="w-full">
-				<header className="w-full h-24">TODO HEADER</header>
-				<Profile />
+				<header className="w-full h-24">
+					<div className="flex justify-between items-center h-full">
+						<Search setSearch={setSearch} className="w-96 shrink" />
+						<Profile />
+					</div>
+				</header>
 				<Outlet />
 			</div>
 		</div>
