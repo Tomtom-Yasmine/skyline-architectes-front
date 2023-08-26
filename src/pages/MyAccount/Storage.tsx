@@ -8,21 +8,18 @@ type Stockage = {
 };
 
 const Storage = () => {
-	const url = process.env.REACT_APP_API_BASE_URL;
 	const api = useApi();
 	const [currentStockage, setCurrentStockage] = useState<Stockage>({
-		stockageUsed: 16,
+		stockageUsed: 0,
 		stockageTotal: 20,
 	});
 	const [newStockage, setNewStockage] = useState<number>(20);
 
 	useEffect(() => {
 		const setUser = async () => {
-			const user = await api.get(`${url}me`);
+			const user = await api.get('/me');
 			setCurrentStockage({
-				//TODO : get User storage used
-				// stockageUsed: user.data.user.stockageUsed,
-				stockageUsed: 16,
+				stockageUsed: user.data.user.totalUsedSizeBytes / 1_000_000_000,
 				stockageTotal: user.data.user.storage,
 			});
 		};
