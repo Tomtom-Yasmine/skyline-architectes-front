@@ -18,7 +18,10 @@ export type User = {
     numberOfFiles: number;
 };
 
-type Role = 'user' | 'admin';
+export enum Role {
+    Admin = 'ADMIN',
+    User = 'USER',
+}
 
 //Authentication
 export type SignUpDataFirstStep = {
