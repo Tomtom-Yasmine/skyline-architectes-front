@@ -7,6 +7,7 @@ import { Option } from 'react-multi-select-component';
 import PinnedFileCard from './PinedFileCard';
 import { FileData } from 'data.type';
 import { getExtensionType } from 'helper/files';
+import { useApi } from 'hooks';
 
 const filterOptions: Option[] = [
 	{ label: 'Images', value: 'images' },
@@ -14,49 +15,50 @@ const filterOptions: Option[] = [
 	{ label: 'excels', value: 'excels' },
 ];
 
+type FilesFromBack = {
+	id: string;
+	slugName: string;
+	displayName: string;
+	serverPath: string;
+	folderPath: string;
+	uploadedAt: Date;
+	extension: string;
+	sizeBytes: number;
+	isPinned: boolean;
+	isDeleted: boolean;
+	deletedAt?: Date | null;
+	thumbnailPath?: string | null;
+	type: 'INVOICE' | 'USER_FILE';
+	userId: string;
+};
+
+const castFilesFromBack = (file: FilesFromBack) => ({
+	name: file.displayName,
+	creationDate: new Date(file.uploadedAt),
+	size: file.sizeBytes / 1024,
+	id: file.id,
+	isPinned: file.isPinned,
+	isEditing: false,
+	url: '../assets/icons/add.svg',
+});
+
 const Home = () => {
-	const [files, setFiles] = useState<FileData[]>([
-		{
-			name: 'Fichier 1',
-			creationDate: new Date(),
-			lastOpenDate: new Date(),
-			size: 50.06,
-			id: '1',
-			isPinned: false,
-			isEditing: false,
-			url: '../assets/icons/add.svg',
-		},
-		{
-			name: 'Image 10',
-			creationDate: new Date(),
-			lastOpenDate: new Date(),
-			size: 50.06,
-			id: '10',
-			isPinned: true,
-			isEditing: false,
-			url: 'https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive.jpg',
-		},
-		{
-			name: 'Fichier 2',
-			creationDate: new Date(),
-			lastOpenDate: new Date(),
-			size: 4.06,
-			id: '2',
-			isPinned: true,
-			isEditing: false,
-			url: 'C:/Users/yasmi/Data/Etudes/Bachelor/Mémoire/annexe.pdf',
-		},
-		{
-			name: 'Fichier 3',
-			creationDate: new Date(),
-			lastOpenDate: new Date(),
-			size: 14.26,
-			id: '3',
-			isPinned: false,
-			isEditing: false,
-			url: 'C:/Users/yasmi/Data/Etudes/Bachelor/Mémoire/abreviations.pdf',
-		},
-	]);
+	const api = useApi();
+	const [files, setFiles] = useState<FileData[]>([]);
+
+	useEffect(() => {
+		const setData = async () => {
+			try {
+				const { data } = (await api.get('/files')) as { data: { files: FilesFromBack[] } };
+				const files = data.files;
+				const formattedFiles = files.map((file) => castFilesFromBack(file));
+				setFiles(formattedFiles);
+			} catch (error) {
+				toast.error('Erreur lors de la récupération de vos fichiers');
+			}
+		};
+		setData();
+	}, [api]);
 	const [filters, setFilters] = useState<string[]>([]);
 	const [newFile, setNewFile] = useState<File | null>(null);
 
@@ -173,6 +175,26 @@ const Home = () => {
 		setFilters(filters.map((filter) => filter.value));
 	};
 
+	const handleUpload = async () => {
+		if (newFile) {
+			const formData = new FormData();
+			formData.append('file', newFile);
+			try {
+				const response = await api.post('/file', formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+				});
+				const file = castFilesFromBack(response.data.file);
+				setFiles((files) => [...files, file]);
+				toast.success('Fichier uploadé avec succès');
+				setNewFile(null);
+			} catch (error) {
+				toast.error('Erreur lors de l\'upload du fichier');
+			}
+		}
+	};
+
 	useEffect(() => {
 		const queryParams = new URLSearchParams(location.search);
 		const success = queryParams.get('success');
@@ -258,7 +280,7 @@ const Home = () => {
 							Poid : {(newFile.size / (1024 * 1024)).toFixed(2)} mo
 						</span>
 					)}
-					<Button className="px-8" category={'secondary'}>
+					<Button className="px-8" category={'secondary'} onClick={handleUpload}>
 						Uploader le fichier
 					</Button>
 				</div>

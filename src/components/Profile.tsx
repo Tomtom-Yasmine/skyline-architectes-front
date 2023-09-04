@@ -47,7 +47,7 @@ const Profile = () => {
 				<img className="rounded-full w-10 h-10" src={defaultImage} />
 			</button>
 			{isOpen && (
-				<div className="absolute flex flex-col justify-center align-middle bg-neutral-light rounded-3xl drop-shadow-md right-0 top-12 w-64">
+				<div className="z-10 absolute flex flex-col justify-center align-middle bg-neutral-light rounded-3xl drop-shadow-md right-0 top-12 w-64">
 					<div className="flex justify-center align-middle p-2">
 						<img className="rounded-full w-20 h-20" src={defaultImage} />
 						{/* TO DO : add user name*/}

@@ -22,7 +22,7 @@ const Options = ({ options }: Props) => {
 				<DotIcon />
 			</button>
 			{isOpen && (
-				<div className="absolute bg-neutral-light rounded-3xl text-left drop-shadow-md left-10 top-[-0.5rem]">
+				<div className="z-10 absolute bg-neutral-light rounded-3xl text-left drop-shadow-md left-10 top-[-0.5rem]">
 					{options.map((option, index) => (
 						<button
 							key={option.label}

@@ -33,7 +33,7 @@ const PinnedFileCard = ({
 				<button onClick={handlePinClick}>
 					<PinIconFull />
 				</button>
-				{file.lastOpenDate.toDateString()}
+				{file.creationDate.toDateString()}
 				<Options options={options} />
 			</div>
 		</div>
