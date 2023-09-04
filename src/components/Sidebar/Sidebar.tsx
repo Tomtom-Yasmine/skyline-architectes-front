@@ -32,7 +32,7 @@ const Sidebar = () => {
 			{user?.role === Role.User ? (
 				<div className="flex flex-col gap-4 w-full">
 					<NavItem
-						label="Tous les fichiers ici et là y'en a beaucoup frérot c'est ouf le nombre de fichiers que t'as"
+						label="Tous les fichiers"
 						icon={FileIcon}
 						onClick={() => navigate('/')}
 						isActive={() => matchPath(window.location.pathname, '/') !== null}
