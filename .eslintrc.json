@@ -20,6 +20,7 @@
 		"indent": ["warn", "tab"],
 		"linebreak-style": [0, "windows"],
 		"quotes": ["warn", "single"],
-		"semi": ["warn", "always"]
+		"semi": ["warn", "always"],
+		"no-mixed-spaces-and-tabs": 0
 	}
 }

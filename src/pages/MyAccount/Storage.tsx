@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PayButton, StockageSelector } from 'components';
 import { useApi } from 'hooks';
+import cn from 'classnames';
 
 type Stockage = {
 	stockageUsed: number;
@@ -15,30 +16,55 @@ const Storage = () => {
 	});
 	const [newStockage, setNewStockage] = useState<number>(20);
 
+	const getElementSize = (sizeOctet: number) => {
+		const units = ['o', 'Ko', 'Mo', 'Go', 'To'];
+		let size = sizeOctet;
+
+		let unitIndex = 0;
+		while (size >= 1000 && unitIndex < units.length - 1) {
+			size /= 1000;
+			unitIndex++;
+		}
+
+		return `${size.toFixed(2)} ${units[unitIndex]}`;
+	};
+
 	useEffect(() => {
 		const setUser = async () => {
 			const user = await api.get('/me');
 			setCurrentStockage({
-				stockageUsed: user.data.user.totalUsedSizeBytes / 1_000_000_000,
+				stockageUsed: user.data.user.totalUsedSizeBytes,
 				stockageTotal: user.data.user.storage,
 			});
+			console.log(user.data.user.totalUsedSizeBytes);
 		};
 		setUser();
 	}, [api]);
+
+	const usageInPercent =
+		currentStockage.stockageTotal > 0
+			? parseFloat(
+				(
+					(currentStockage.stockageUsed / (currentStockage.stockageTotal * 1000000000)) *
+						100
+				).toFixed(1)
+			  ) || 0
+			: 0;
 
 	return (
 		<div className="flex flex-col gap-24">
 			<div className="text-2xl flex flex-col gap-4">
 				<h2 className="text-3xl text-azul-300">Stockage actuel</h2>
-				{currentStockage.stockageUsed} Go utilisés sur {currentStockage.stockageTotal} Go
+				{getElementSize(currentStockage.stockageUsed)} utilisés sur{' '}
+				{currentStockage.stockageTotal} Go
 				<div className="w-10/12 bg-neutral-light">
 					<div
-						className="h-3 bg-azul-700"
-						style={{
-							width: `${
-								(currentStockage.stockageUsed / currentStockage.stockageTotal) * 100
-							}%`,
-						}}
+						style={{ width: `${usageInPercent}%` }}
+						className={cn('h-3 bg-azul-700', {
+							'bg-red-500': usageInPercent > 90,
+							'bg-yellow-500': usageInPercent > 50 && usageInPercent <= 90,
+							'bg-green-500': usageInPercent <= 50,
+						})}
 					/>
 				</div>
 			</div>

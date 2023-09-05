@@ -35,7 +35,7 @@ type FilesFromBack = {
 const castFilesFromBack = (file: FilesFromBack) => ({
 	name: file.displayName,
 	creationDate: new Date(file.uploadedAt),
-	size: file.sizeBytes / 1024,
+	size: file.sizeBytes,
 	id: file.id,
 	isPinned: file.isPinned,
 	isEditing: false,
@@ -260,7 +260,7 @@ const ClientHome = () => {
 									isPinned={file.isPinned}
 									date={file.creationDate}
 									url={file.url}
-									additionalInformation={`${file.size} Mo`}
+									additionalInformation={`${(file.size / 1000000).toFixed(2)} Mo`}
 									options={createOptions(file.id)}
 									onNameChange={handleNameChange(file.id)}
 									onPinClick={handlePinClick(file.id)}
@@ -277,7 +277,7 @@ const ClientHome = () => {
 				<div className="flex flex-col justify-between h-20">
 					{newFile && (
 						<span className="text-neutral-dark text-lg">
-							Poid : {(newFile.size / (1024 * 1024)).toFixed(2)} mo
+							Poids : {(newFile.size / (1024 * 1024)).toFixed(2)} Mo
 						</span>
 					)}
 					<Button className="px-8" category={'secondary'} onClick={handleUpload}>
