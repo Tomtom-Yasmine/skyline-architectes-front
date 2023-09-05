@@ -15,3 +15,5 @@ export { default as Profile } from './Profile';
 export { default as NavItem } from './Sidebar/NavItem';
 export { default as UserStorage } from './Sidebar/UserStorage';
 export { default as FileFilters } from './Array/Files/FilesFilters';
+export { Card, CardBody, CardHeader } from './Card';
+export { default as SmallStatistic } from './Statistics/SmallStatistic';
