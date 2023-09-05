@@ -73,6 +73,8 @@ const Customers = () => {
 		setFilters(filters.map((filter) => filter.value));
 	};
 
+	const filesSorted = [...getFilteredFiles()].sort(handleSort(sort.direction, sort.column));
+
 	return (
 		<div>
 			<div className="flex flex-col bg-neutral-light py-5 px-1 rounded-3xl">
@@ -108,9 +110,8 @@ const Customers = () => {
 				/>
 
 				<div className="bg-neutral-lighter w-full flex flex-col items-center ">
-					{[...getFilteredFiles()]
-						.sort(handleSort(sort.direction, sort.column))
-						.map((file, index) => (
+					{filesSorted.length > 0 ? (
+						filesSorted.map((file, index) => (
 							<React.Fragment key={file.id}>
 								<FileLine
 									name={file.name}
@@ -124,7 +125,10 @@ const Customers = () => {
 									<div className="border-b border-neutral-light w-[98%]" />
 								)}
 							</React.Fragment>
-						))}
+						))
+					) : (
+						<span className="text-red-500 text-2xl mx-auto">Pas de fichiers</span>
+					)}
 				</div>
 			</div>
 		</div>

@@ -7,36 +7,48 @@ const Profile = () => {
 	const ref = useOutsideClicker(() => setOpen(false));
 	const auth = useAuth();
 	// const image = '';
-	const options = [
-		{
-			name: 'Personal Information',
-			label: 'Informations personnelles',
-			onClick: () => {
-				window.open('/myaccount?tab=personalInformations');
-			},
-		},
-		{
-			name: 'Storage Offer',
-			label: 'Offre de stockage',
-			onClick: () => {
-				window.open('/myaccount?tab=storageOffer');
-			},
-		},
-		{
-			name: 'Invoices',
-			label: 'Factures',
-			onClick: () => {
-				window.open('/myaccount?tab=invoices');
-			},
-		},
-		{
-			name: 'Logout',
-			label: 'Déconnexion',
-			onClick: () => {
-				auth?.dispatch({ type: 'logout' });
-			},
-		},
-	];
+	const options =
+		auth?.info.user?.role === 'USER'
+			? [
+				{
+					name: 'Personal Information',
+					label: 'Informations personnelles',
+					onClick: () => {
+						window.open('/myaccount?tab=personalInformations');
+					},
+				},
+				{
+					name: 'Storage Offer',
+					label: 'Offre de stockage',
+					onClick: () => {
+						window.open('/myaccount?tab=storageOffer');
+					},
+				},
+				{
+					name: 'Invoices',
+					label: 'Factures',
+					onClick: () => {
+						window.open('/myaccount?tab=invoices');
+					},
+				},
+				{
+					name: 'Logout',
+					label: 'Déconnexion',
+					onClick: () => {
+						auth?.dispatch({ type: 'logout' });
+					},
+				},
+			  ]
+			: [
+				{
+					name: 'Logout',
+					label: 'Déconnexion',
+					onClick: () => {
+						auth?.dispatch({ type: 'logout' });
+					},
+				},
+			  ];
+
 	const handleClick = () => {
 		setOpen(!isOpen);
 	};
