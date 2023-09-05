@@ -19,7 +19,19 @@ import { ReactComponent as ArrowBackIcon } from 'assets/icons/arrow_back.svg';
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-const chartBackgroundColors = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'];
+const chartBackgroundColors = [
+	'rgb(255, 59, 48)',
+	'rgb(0, 122, 255)',
+	'rgb(255, 204, 0)',
+	'rgb(40, 205, 65)',
+	'rgb(175, 82, 222)',
+	'rgb(255, 149, 0)',
+	'rgb(88, 86, 214)',
+	'rgb(0, 199, 190)',
+	'rgb(255, 45, 85)',
+	'rgb(162, 132, 94)',
+	'rgb(142, 142, 147)',
+];
 
 const periods = {
 	day: {
