@@ -65,12 +65,7 @@ const ClientHome = () => {
 	const createOptions = (fileId: string) => [
 		{
 			label: 'Ouvrir',
-			onClick: () => {
-				const fileToOpen = files.find((file) => file.id === fileId);
-				if (fileToOpen) {
-					window.open(fileToOpen.url, '_blank');
-				}
-			},
+			onClick: handleOpen(fileId),
 		},
 		{
 			label: 'Epingler',
@@ -109,13 +104,22 @@ const ClientHome = () => {
 		},
 	];
 	const handleDownload = (id: string) => async () => {
-		console.log('je vais gérer le download');
 		try {
-			const result = await api.get(`/file/${id}/access`);
+			const result = await api.get(`/file/${id}/download`);
 			const url = `${process.env.REACT_APP_API_BASE_URL}file/${id}/download?accessToken=${result.data.accessToken}`;
 			window.open(url);
 		} catch (_) {
 			toast.error('Erreur lors du téléchargement du fichier');
+		}
+	};
+
+	const handleOpen = (id: string) => async () => {
+		try {
+			const result = await api.get(`/file/${id}/access`);
+			const url = `${process.env.REACT_APP_API_BASE_URL}file/${id}/raw?accessToken=${result.data.accessToken}`;
+			window.open(url, '_blank');
+		} catch (_) {
+			toast.error('Erreur lors de l\'ouverture du fichier');
 		}
 	};
 
