@@ -6,8 +6,6 @@ type Props = {
 };
 
 const UserStorage = ({ user }: Props) => {
-	console.log({ user });
-
 	if (!user) return null;
 
 	const totalUsedSizeBytes = Math.floor(user.totalUsedSizeBytes / 1_000_000_000);

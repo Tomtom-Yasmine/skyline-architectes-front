@@ -36,8 +36,6 @@ const AdminHome = () => {
 		};
 		inititateStats();
 		inititateCustomers();
-
-		console.log(customers);
 	}, [api]);
 
 	return (

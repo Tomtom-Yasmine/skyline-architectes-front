@@ -78,12 +78,7 @@ const ClientHome = () => {
 		},
 		{
 			label: 'Télécharger',
-			onClick: () => {
-				const fileToDownload = files.find((file) => file.id === fileId);
-				if (fileToDownload) {
-					window.location.href = fileToDownload.url;
-				}
-			},
+			onClick: handleDownload(fileId),
 		},
 		{
 			label: 'Renommer',
@@ -94,7 +89,6 @@ const ClientHome = () => {
 					}
 					return file;
 				});
-				//todo: rename file in backend
 				setFiles(newFiles);
 			},
 		},
@@ -104,13 +98,26 @@ const ClientHome = () => {
 			label: 'Supprimer',
 			onClick: () => {
 				const newFiles = files.filter((file) => file.id !== fileId);
-				//todo: delete file from backend
-				toast.success('Fichier supprimé avec succès');
-				// else toast.error(`Impossible de supprimer la ressource`);
+				try {
+					api.delete(`/file/${fileId}`);
+					toast.success('Fichier supprimé avec succès');
+				} catch (error) {
+					toast.error('Impossible de supprimer la ressource');
+				}
 				setFiles(newFiles);
 			},
 		},
 	];
+	const handleDownload = (id: string) => async () => {
+		console.log('je vais gérer le download');
+		try {
+			const result = await api.get(`/file/${id}/access`);
+			const url = `${process.env.REACT_APP_API_BASE_URL}file/${id}/download?accessToken=${result.data.accessToken}`;
+			window.open(url);
+		} catch (_) {
+			toast.error('Erreur lors du téléchargement du fichier');
+		}
+	};
 
 	const handleNameChange = (fileId: string) => (newName: string) => {
 		const newFiles = files.map((file) => {
@@ -119,9 +126,13 @@ const ClientHome = () => {
 			}
 			return file;
 		});
-		//todo: rename file in backend
+		try {
+			api.patch(`/file/${fileId}`, { displayName: newName });
+			toast.success('Fichier renommé avec succès');
+		} catch (error) {
+			toast.error('Impossible de renommer le fichier');
+		}
 		setFiles(newFiles);
-		toast.success('Fichier renommé avec succès');
 	};
 
 	const handlePinClick = (fileId: string) => () => {
@@ -133,12 +144,13 @@ const ClientHome = () => {
 			}
 			return file;
 		});
-		//todo: pin file in backend
-
-		//if response positive of the backend
-		if (pin) toast.success('Fichier désépinglé avec succès');
-		else toast.success('Fichier épinglé avec succès');
-		// toast.error("Impossible de modifier l'épinglage");
+		try {
+			api.patch(`/file/${fileId}`, { isPinned: !pin });
+			if (pin) toast.success('Fichier désépinglé avec succès');
+			else toast.success('Fichier épinglé avec succès');
+		} catch (error) {
+			toast.error('Impossible de modifier l\'épinglage');
+		}
 		setFiles(newFiles);
 	};
 
@@ -264,6 +276,7 @@ const ClientHome = () => {
 									options={createOptions(file.id)}
 									onNameChange={handleNameChange(file.id)}
 									onPinClick={handlePinClick(file.id)}
+									onDownloadClick={handleDownload(file.id)}
 								/>
 								{files.length - 1 !== index && (
 									<div className="border-b border-neutral-light w-[98%]" />

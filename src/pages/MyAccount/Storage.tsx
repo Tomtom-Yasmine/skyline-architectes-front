@@ -36,7 +36,6 @@ const Storage = () => {
 				stockageUsed: user.data.user.totalUsedSizeBytes,
 				stockageTotal: user.data.user.storage,
 			});
-			console.log(user.data.user.totalUsedSizeBytes);
 		};
 		setUser();
 	}, [api]);
