@@ -5,7 +5,7 @@ import { createContext } from 'react';
 
 type AuthInfo = {
 	jwt?: string;
-	user?: User;
+	user?: Partial<User>;
 	isLogged: boolean;
 };
 

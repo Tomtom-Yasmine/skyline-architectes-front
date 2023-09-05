@@ -8,6 +8,7 @@ type Props = {
 	files: number;
 	stockageAvailable: number;
 	stockageused: number;
+	onClick: () => void;
 };
 
 const CustomerLine = ({
@@ -17,9 +18,13 @@ const CustomerLine = ({
 	files,
 	stockageAvailable,
 	stockageused,
+	onClick: handleClick,
 }: Props) => {
 	return (
-		<div className="grid grid-cols-5 hover:bg-light-blue/20 h-12 items-center w-full px-3">
+		<div
+			className="grid grid-cols-5 hover:bg-light-blue/20 h-12 items-center w-full px-3 cursor-pointer"
+			onClick={handleClick}
+		>
 			<div className="col-span-1">{fistName}</div>
 			<div className="col-span-1">{lastName}</div>
 			<div className="col-span-1">{registerDate.toDateString()}</div>

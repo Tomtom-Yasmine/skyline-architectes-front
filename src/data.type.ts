@@ -72,26 +72,46 @@ export type InvoiceData = {
 };
 
 export type GeneralStatisticsData = {
-    numberOfUsers: number;
-    numberOfFiles: number;
-    totalUsedSizeBytes: number;
-    filesPerUser: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        value: number;
-    }[];
-    usedStorageBytesPerUser: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        value: number;
-    }[];
+	numberOfUsers: number;
+	numberOfFiles: number;
+	totalUsedSizeBytes: number;
+	filesPerUser: {
+		id: string;
+		firstName: string;
+		lastName: string;
+		value: number;
+	}[];
+	usedStorageBytesPerUser: {
+		id: string;
+		firstName: string;
+		lastName: string;
+		value: number;
+	}[];
 };
 
 export type FilesUploadedOnPeriodStatisticsData = {
-    filesGroupedByDate: Record<string, {
-        count: number;
-        sizeBytes: number;
-    }>;
+	filesGroupedByDate: Record<
+		string,
+		{
+			count: number;
+			sizeBytes: number;
+		}
+	>;
+};
+
+export type FilesFromBack = {
+	id: string;
+	slugName: string;
+	displayName: string;
+	serverPath: string;
+	folderPath: string;
+	uploadedAt: Date;
+	extension: string;
+	sizeBytes: number;
+	isPinned: boolean;
+	isDeleted: boolean;
+	deletedAt?: Date | null;
+	thumbnailPath?: string | null;
+	type: 'INVOICE' | 'USER_FILE';
+	userId: string;
 };

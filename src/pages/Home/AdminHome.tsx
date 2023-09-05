@@ -3,6 +3,7 @@ import { User } from 'data.type';
 import { useApi } from 'hooks';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 type Stats = {
 	users: number;
@@ -11,6 +12,7 @@ type Stats = {
 
 const AdminHome = () => {
 	const api = useApi();
+	const navigate = useNavigate();
 	const [stats, setStats] = useState<Stats>();
 	const [customers, setCustomers] = useState<User[]>([]);
 
@@ -49,7 +51,7 @@ const AdminHome = () => {
 						{stats?.files} <br /> Fichiers déposés
 					</div>
 				</div>
-				<Button className="w-1/4" category="secondary">
+				<Button className="w-1/4" category="secondary" onClick={() => navigate('/statistics')}>
 					Voir les statistiques
 				</Button>
 			</div>
@@ -72,6 +74,7 @@ const AdminHome = () => {
 								files={customer.numberOfFiles}
 								stockageAvailable={customer.storage}
 								stockageused={customer.totalUsedSizeBytes}
+								onClick={() => navigate(`/customers/${customer.id}`)}
 							/>
 							{customers.length - 1 !== index && (
 								<div className="border-b border-neutral-light w-[98%]" />

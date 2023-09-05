@@ -17,7 +17,7 @@ type Props = {
 	additionalInformation: string;
 	isNameBeingEdited?: boolean;
 	onNameChange?: (name: string) => void;
-	onPinClick: () => void;
+	onPinClick?: () => void;
 	onDownloadClick?: () => void;
 	options?: Array<{
 		label: string;

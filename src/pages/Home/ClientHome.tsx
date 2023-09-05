@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, FileLine, FileUpload } from 'components';
+import { Button, FileLine, FileUpload, FileFilters } from 'components';
 import { FilesArrayHeader } from 'components';
 import { toast } from 'react-toastify';
-import FileFilters from './FilesFilters';
 import { Option } from 'react-multi-select-component';
 import PinnedFileCard from './PinedFileCard';
-import { FileData } from 'data.type';
+import { FileData, FilesFromBack } from 'data.type';
 import { getExtensionType } from 'helper/files';
 import { useApi } from 'hooks';
 
@@ -14,23 +13,6 @@ const filterOptions: Option[] = [
 	{ label: 'PDF', value: 'pdf' },
 	{ label: 'excels', value: 'excels' },
 ];
-
-type FilesFromBack = {
-	id: string;
-	slugName: string;
-	displayName: string;
-	serverPath: string;
-	folderPath: string;
-	uploadedAt: Date;
-	extension: string;
-	sizeBytes: number;
-	isPinned: boolean;
-	isDeleted: boolean;
-	deletedAt?: Date | null;
-	thumbnailPath?: string | null;
-	type: 'INVOICE' | 'USER_FILE';
-	userId: string;
-};
 
 const castFilesFromBack = (file: FilesFromBack) => ({
 	name: file.displayName,

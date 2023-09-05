@@ -14,3 +14,4 @@ export { default as SectionTitle } from './SectionTitle';
 export { default as Profile } from './Profile';
 export { default as NavItem } from './Sidebar/NavItem';
 export { default as UserStorage } from './Sidebar/UserStorage';
+export { default as FileFilters } from './Array/Files/FilesFilters';

@@ -6,6 +6,7 @@ import { ProtectedRoute, AdminProtectedRoute } from 'components';
 import Home from 'pages/Home/Home';
 import Statistics from 'pages/Statistics/Statistics';
 import MyAccount from 'pages/MyAccount/MyAccount';
+import Customers from 'pages/Customers';
 
 //TODO : import lazy
 const router = createBrowserRouter([
@@ -23,9 +24,18 @@ const router = createBrowserRouter([
 		],
 	},
 	{
+		path: '/admin',
+		element: <ProtectedRoute />,
+	},
+	{
 		path: '/statistics',
 		element: <AdminProtectedRoute />,
 		children: [{ index: true, element: <Statistics /> }],
+	},
+	{
+		path: '/customers/:id',
+		element: <AdminProtectedRoute />,
+		children: [{ index: true, element: <Customers /> }],
 	},
 ]);
 
