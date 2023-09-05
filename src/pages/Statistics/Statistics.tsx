@@ -161,7 +161,7 @@ const Statistics = () => {
 					<CardHeader>
 						<div className="flex gap-2 w-full justify-between">
 							<span className="text-xl">Nombre de fichiers par client</span>
-							<span className="text-2xl">{averageFilesPerUser} en moyenne</span>
+							<span className="text-2xl">{Math.round(averageFilesPerUser)} en moyenne</span>
 						</div>
 					</CardHeader>
 					<CardBody>
