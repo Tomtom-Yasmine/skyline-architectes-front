@@ -65,3 +65,28 @@ export type InvoiceData = {
     isPinned: boolean;
     price: number;
 };
+
+export type GeneralStatisticsData = {
+    numberOfUsers: number;
+    numberOfFiles: number;
+    totalUsedSizeBytes: number;
+    filesPerUser: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        value: number;
+    }[];
+    usedStorageBytesPerUser: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        value: number;
+    }[];
+};
+
+export type FilesUploadedOnPeriodStatisticsData = {
+    filesGroupedByDate: Record<string, {
+        count: number;
+        sizeBytes: number;
+    }>;
+};

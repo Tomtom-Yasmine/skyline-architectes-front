@@ -2,8 +2,9 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import Authentication from 'pages/Authentication/Authentication';
-import { ProtectedRoute } from 'components';
+import { ProtectedRoute, AdminProtectedRoute } from 'components';
 import Home from 'pages/Home/Home';
+import Statistics from 'pages/Statistics/Statistics';
 import MyAccount from 'pages/MyAccount/MyAccount';
 
 //TODO : import lazy
@@ -20,6 +21,11 @@ const router = createBrowserRouter([
 			{ path: 'myaccount', element: <MyAccount /> },
 			{ path: 'dashboard', element: <div>Dashboard</div> },
 		],
+	},
+	{
+		path: '/statistics',
+		element: <AdminProtectedRoute />,
+		children: [{ index: true, element: <Statistics /> }],
 	},
 ]);
 
