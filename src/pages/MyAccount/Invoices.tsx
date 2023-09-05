@@ -48,7 +48,7 @@ const Invoices = () => {
 					name: invoice.displayName,
 					creationDate: new Date(invoice.uploadedAt),
 					isPinned: invoice.isPinned,
-					price: invoice.unitPriceExcludingTaxes * invoice.quantity * (1 + invoice.vat),
+					price: invoice.quantity,
 				}));
 				if (!invoices) throw new Error('No invoices data');
 				setInvoices(invoices);
