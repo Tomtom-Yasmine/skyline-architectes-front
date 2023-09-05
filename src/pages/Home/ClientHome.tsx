@@ -105,8 +105,8 @@ const ClientHome = () => {
 	];
 	const handleDownload = (id: string) => async () => {
 		try {
-			const result = await api.get(`/file/${id}/download`);
-			const url = `${process.env.REACT_APP_API_BASE_URL}file/${id}/download?accessToken=${result.data.accessToken}`;
+			const token = await api.get(`/file/${id}/access`);
+			const url = `${process.env.REACT_APP_API_BASE_URL}file/${id}/download?accessToken=${token.data.accessToken}`;
 			window.open(url);
 		} catch (_) {
 			toast.error('Erreur lors du téléchargement du fichier');
