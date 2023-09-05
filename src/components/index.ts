@@ -8,6 +8,7 @@ export { default as FileUpload } from './FileUpload';
 export { default as Tabs } from './Tabs';
 export { default as PayButton } from './PaymentForm/PayButton';
 export { default as ProtectedRoute } from './ProtectedRoute';
+export { default as AdminProtectedRoute } from './AdminProtectedRoute';
 export { default as SectionTitle } from './SectionTitle';
 export { default as Profile } from './Profile';
 export { default as NavItem } from './Sidebar/NavItem';
