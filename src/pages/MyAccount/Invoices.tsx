@@ -1,9 +1,14 @@
 import { FilesArrayHeader, FileLine } from 'components';
 import { InvoiceData } from 'data.type';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useApi from 'hooks/useApi';
+import useAuth from 'hooks/useAuth';
 import { toast } from 'react-toastify';
 
 const Invoices = () => {
+	const api = useApi();
+	const auth = useAuth();
+
 	const [sort, setSort] = useState<{
 		direction: 'up' | 'down';
 		column: 'name' | 'creationDate' | 'price';
@@ -12,7 +17,27 @@ const Invoices = () => {
 		column: 'name',
 	});
 
-	const [invoices, setInvoices] = useState<Array<InvoiceData>>([
+	const [invoices, setInvoices] = useState<Array<InvoiceData>>([]);
+
+	useEffect(() => {
+		api.get<{ invoices: any[] }>('/invoices')
+			.then((res) => {
+				const invoices = res.data.invoices.map((invoice) => ({
+					id: invoice.id,
+					name: invoice.displayName,
+					creationDate: new Date(invoice.uploadedAt),
+					isPinned: invoice.isPinned,
+					price: invoice.unitPriceExcludingTaxes * invoice.quantity * (1 + invoice.vat),
+				}));
+				if (!invoices) throw new Error('No invoices data');
+				setInvoices(invoices);
+			})
+			.catch(() => {
+				toast.error('Erreur lors de la récupération des factures');
+			});
+	}, [api]);
+
+	/* const [invoices, setInvoices] = useState<Array<InvoiceData>>([
 		{
 			id: '1',
 			name: 'Facture 1',
@@ -61,53 +86,42 @@ const Invoices = () => {
 			url: 'https://wwoogle.com',
 			isPinned: false,
 		},
-	]);
+	]); */
+
+	const handleOpen = (id: string) => () => {
+		api.get(`/invoice/${id}/access`)
+			.then((res) => {
+				const url = `${process.env.REACT_APP_API_BASE_URL}invoice/${id}/raw?accessToken=${res.data.accessToken}`;
+				window.open(url, '_blank');
+			})
+			.catch(() => {
+				toast.error('Erreur lors de la récupération de la facture');
+			});
+	};
+
+	const handleDownload = (id: string) => () => {
+		api.get(`/invoice/${id}/access`)
+			.then((res) => {
+				const url = `${process.env.REACT_APP_API_BASE_URL}invoice/${id}/download?accessToken=${res.data.accessToken}`;
+				window.open(url);
+			})
+			.catch(() => {
+				toast.error('Erreur lors du téléchargement de la facture');
+			});
+	};
 
 	const createOptions = (invoiceId: string) => [
 		{
 			label: 'Ouvrir',
-			onClick: () => {
-				const fileToOpen = invoices.find((invoice) => invoice.id === invoiceId);
-				if (fileToOpen) {
-					window.open(fileToOpen.url, '_blank');
-				}
-			},
+			onClick: handleOpen(invoiceId),
 		},
 		{
-			label: 'Epingler',
+			label: 'Épingler',
 			onClick: handlePin(invoiceId),
 		},
 		{
 			label: 'Télécharger',
-			onClick: () => {
-				const fileToDownload = invoices.find((invoice) => invoice.id === invoiceId);
-				if (fileToDownload) {
-					window.location.href = fileToDownload.url;
-				}
-			},
-		},
-		{
-			label: 'Renommer',
-			onClick: () => {
-				const newFiles = invoices.map((invoice) => {
-					if (invoice.id === invoiceId) {
-						return { ...invoice, isEditing: true };
-					}
-					return invoice;
-				});
-				//todo: rename invoice in backend
-				setInvoices(newFiles);
-			},
-		},
-		{
-			label: 'Supprimer',
-			onClick: () => {
-				const newFiles = invoices.filter((invoice) => invoice.id !== invoiceId);
-				//todo: delete invoice from backend
-				toast.success('Fichier supprimé avec succès');
-				// else toast.error(`Impossible de supprimer la ressource`);
-				setInvoices(newFiles);
-			},
+			onClick: handleDownload(invoiceId),
 		},
 	];
 
@@ -127,11 +141,11 @@ const Invoices = () => {
 
 	const handleSort =
 		(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'price') =>
-			(a: InvoiceData, b: InvoiceData) => {
-				if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
-				if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
-				return 0;
-			};
+		(a: InvoiceData, b: InvoiceData) => {
+			if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
+			if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
+			return 0;
+		};
 
 	return (
 		<div className="flex flex-col bg-neutral-light py-5 px-1 rounded-3xl">
@@ -164,10 +178,11 @@ const Invoices = () => {
 							name={invoice.name}
 							isPinned={invoice.isPinned}
 							date={invoice.creationDate}
-							url={invoice.url}
+							url=""
 							additionalInformation={`${invoice.price} €`}
 							options={createOptions(invoice.id)}
 							onPinClick={handlePin(invoice.id)}
+							onDownloadClick={handleDownload(invoice.id)}
 						/>
 						{invoices.length - 1 !== index && (
 							<div className="border-b border-neutral-light w-[98%]" />
