@@ -1,9 +1,35 @@
 import { FilesArrayHeader, FileLine } from 'components';
-import { InvoiceData } from 'data.type';
-import React, { useState } from 'react';
+import { FileType, InvoiceData } from 'data.type';
+import React, { useEffect, useState } from 'react';
+import useApi from 'hooks/useApi';
 import { toast } from 'react-toastify';
 
+type Invoice = {
+	id: string;
+	slugName: string;
+	displayName: string;
+	serverPath: string;
+	folderPath: string;
+	uploadedAt: string;
+	extension: string;
+	sizeBytes: number;
+	isPinned: boolean;
+	isDeleted: boolean;
+	deletedAt?: string | null; // DateTime ou null
+	thumbnailPath?: string | null;
+	type: FileType; // Assurez-vous d'importer le type FileType approprié
+	userId: string;
+	orderNumber: number;
+	quantity: number;
+	unitPriceExcludingTaxes: number;
+	vat: number;
+	createdAt: string;
+	fileId: string;
+};
+
 const Invoices = () => {
+	const api = useApi();
+
 	const [sort, setSort] = useState<{
 		direction: 'up' | 'down';
 		column: 'name' | 'creationDate' | 'price';
@@ -12,102 +38,60 @@ const Invoices = () => {
 		column: 'name',
 	});
 
-	const [invoices, setInvoices] = useState<Array<InvoiceData>>([
-		{
-			id: '1',
-			name: 'Facture 1',
-			creationDate: new Date(),
-			price: 100,
-			url: 'https://www.googl.com',
-			isPinned: false,
-		},
-		{
-			id: '2',
-			name: 'Facture 2',
-			creationDate: new Date(),
-			price: 100,
-			url: 'https://www.googe.com',
-			isPinned: false,
-		},
-		{
-			id: '3',
-			name: 'Facture 3',
-			creationDate: new Date(),
-			price: 100,
-			url: 'https://www.gogle.com',
-			isPinned: false,
-		},
-		{
-			id: '4',
-			name: 'Facture 4',
-			creationDate: new Date(),
-			price: 100,
-			url: 'https://www.oogle.com',
-			isPinned: false,
-		},
-		{
-			id: '5',
-			name: 'Facture 5',
-			creationDate: new Date(),
-			price: 100,
-			url: 'https://www.ggle.com',
-			isPinned: false,
-		},
-		{
-			id: '6',
-			name: 'Facture 6',
-			creationDate: new Date(),
-			price: 100,
-			url: 'https://wwoogle.com',
-			isPinned: false,
-		},
-	]);
+	const [invoices, setInvoices] = useState<Array<InvoiceData>>([]);
+
+	useEffect(() => {
+		api.get<{ invoices: Invoice[] }>('/invoices')
+			.then((res) => {
+				const invoices = res.data.invoices.map((invoice) => ({
+					id: invoice.id,
+					name: invoice.displayName,
+					creationDate: new Date(invoice.uploadedAt),
+					isPinned: invoice.isPinned,
+					price: invoice.unitPriceExcludingTaxes * invoice.quantity * (1 + invoice.vat),
+				}));
+				if (!invoices) throw new Error('No invoices data');
+				setInvoices(invoices);
+			})
+			.catch(() => {
+				toast.error('Erreur lors de la récupération des factures');
+			});
+	}, [api]);
+
+	const handleOpen = (id: string) => () => {
+		api.get(`/invoice/${id}/access`)
+			.then((res) => {
+				const url = `${process.env.REACT_APP_API_BASE_URL}invoice/${id}/raw?accessToken=${res.data.accessToken}`;
+				window.open(url, '_blank');
+			})
+			.catch(() => {
+				toast.error('Erreur lors de la récupération de la facture');
+			});
+	};
+
+	const handleDownload = (id: string) => () => {
+		api.get(`/invoice/${id}/access`)
+			.then((res) => {
+				const url = `${process.env.REACT_APP_API_BASE_URL}invoice/${id}/download?accessToken=${res.data.accessToken}`;
+				window.open(url);
+			})
+			.catch(() => {
+				toast.error('Erreur lors du téléchargement de la facture');
+			});
+	};
 
 	const createOptions = (invoiceId: string) => [
 		{
 			label: 'Ouvrir',
-			onClick: () => {
-				const fileToOpen = invoices.find((invoice) => invoice.id === invoiceId);
-				if (fileToOpen) {
-					window.open(fileToOpen.url, '_blank');
-				}
-			},
+			onClick: handleOpen(invoiceId),
 		},
 		{
-			label: 'Epingler',
+			label: 'Épingler',
 			onClick: handlePin(invoiceId),
 		},
 		{
 			label: 'Télécharger',
-			onClick: () => {
-				const fileToDownload = invoices.find((invoice) => invoice.id === invoiceId);
-				if (fileToDownload) {
-					window.location.href = fileToDownload.url;
-				}
-			},
-		},
-		{
-			label: 'Renommer',
-			onClick: () => {
-				const newFiles = invoices.map((invoice) => {
-					if (invoice.id === invoiceId) {
-						return { ...invoice, isEditing: true };
-					}
-					return invoice;
-				});
-				//todo: rename invoice in backend
-				setInvoices(newFiles);
-			},
-		},
-		{
-			label: 'Supprimer',
-			onClick: () => {
-				const newFiles = invoices.filter((invoice) => invoice.id !== invoiceId);
-				//todo: delete invoice from backend
-				toast.success('Fichier supprimé avec succès');
-				// else toast.error(`Impossible de supprimer la ressource`);
-				setInvoices(newFiles);
-			},
+			onClick: handleDownload(invoiceId),
 		},
 	];
 
@@ -164,10 +148,11 @@ const Invoices = () => {
 							name={invoice.name}
 							isPinned={invoice.isPinned}
 							date={invoice.creationDate}
-							url={invoice.url}
+							url=""
 							additionalInformation={`${invoice.price} €`}
 							options={createOptions(invoice.id)}
 							onPinClick={handlePin(invoice.id)}
+							onDownloadClick={handleDownload(invoice.id)}
 						/>
 						{invoices.length - 1 !== index && (
 							<div className="border-b border-neutral-light w-[98%]" />

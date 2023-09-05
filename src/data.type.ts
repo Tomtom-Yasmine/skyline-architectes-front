@@ -24,6 +24,11 @@ export enum Role {
 	User = 'USER',
 }
 
+export enum FileType {
+	Invoice = 'INVOICE',
+	UserFile = 'USER_FILE',
+}
+
 //Authentication
 export type SignUpDataFirstStep = {
 	lastName: string;
@@ -64,5 +69,4 @@ export type InvoiceData = {
 	creationDate: Date;
 	isPinned: boolean;
 	price: number;
-	url: string;
 };
