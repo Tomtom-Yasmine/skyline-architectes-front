@@ -18,6 +18,7 @@ type Props = {
 	isNameBeingEdited?: boolean;
 	onNameChange?: (name: string) => void;
 	onPinClick: () => void;
+	onDownloadClick?: () => void;
 	options?: Array<{
 		label: string;
 		onClick: () => void;
@@ -34,20 +35,21 @@ const FileLine = ({
 	isNameBeingEdited = false,
 	onNameChange: handleNameChange,
 	onPinClick: handlePinClick,
+	onDownloadClick: handleDownload,
 }: Props) => {
 	const [newName, setNewName] = useState(name);
 
 	const getIcon = (fileName: string, className: string) => {
 		const extension = getExtensionType(fileName);
 		switch (extension) {
-		case 'pdf':
-			return <PDFIcon className={className} />;
-		case 'image':
-			return <ImageIcon className={className} />;
-		case 'excel':
-			return <ExcelIcon className={className} />;
-		default:
-			return <FileIcon className={className} />;
+			case 'pdf':
+				return <PDFIcon className={className} />;
+			case 'image':
+				return <ImageIcon className={className} />;
+			case 'excel':
+				return <ExcelIcon className={className} />;
+			default:
+				return <FileIcon className={className} />;
 		}
 	};
 	return (
@@ -76,7 +78,7 @@ const FileLine = ({
 			<div className="col-span-1">{date.toDateString()}</div>
 			<div className="col-span-1">{additionalInformation}</div>
 			<div className="col-span-1 flex gap-4">
-				<a href={url} download>
+				<a onClick={handleDownload} className="cursor-pointer">
 					<DownloadIcon />
 				</a>
 				{options.length && <Options options={options} />}
