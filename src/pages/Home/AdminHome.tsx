@@ -1,7 +1,8 @@
-import { Button, CustomerLine } from 'components';
+import { Button, Card, CardBody, CardHeader, CustomerLine, SmallStatistic } from 'components';
 import { User } from 'data.type';
 import { useApi } from 'hooks';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 type Stats = {
@@ -10,6 +11,7 @@ type Stats = {
 };
 
 const AdminHome = () => {
+	const navigate = useNavigate();
 	const api = useApi();
 	const [stats, setStats] = useState<Stats>();
 	const [customers, setCustomers] = useState<User[]>([]);
@@ -42,25 +44,37 @@ const AdminHome = () => {
 
 	return (
 		<main className="bg-neutral-white  gap-12 flex flex-col">
-			<div className="bg-neutral-light flex flex-col gap-16 p-8 rounded-3xl">
-				<div className="flex gap-8">
-					<div className="flex justify-center items-center bg-neutral-white flex-1 text-center p-4 text-3xl rounded-lg">
-						{stats?.users} <br /> Clients inscrits
+			<Card>
+				<CardBody>
+					<div className="flex justify-between gap-3">
+						<SmallStatistic
+							label="clients inscrits"
+							value={stats?.users.toString() ?? '0'}
+							className="grow shrink-0"
+						/>
+						<SmallStatistic
+							label="fichiers déposés"
+							value={stats?.files.toString() ?? '0'}
+							className="grow shrink-0"
+						/>
 					</div>
-					<div className="flex justify-center items-center bg-neutral-white flex-1 text-center p-4 text-3xl rounded-lg">
-						{stats?.files} <br /> Fichiers déposés
-					</div>
-				</div>
-				<Button className="w-1/4" category="secondary">
-					Voir les statistiques
-				</Button>
-			</div>
+					<Button
+						className="w-1/4"
+						category="secondary"
+						onClick={() => {
+							navigate('/statistics');
+						}}
+					>
+						Voir les statistiques
+					</Button>
+				</CardBody>
+			</Card>
 
 			<div className="flex flex-col bg-neutral-light py-5 px-1 rounded-3xl">
 				<header className="grid grid-cols-5 pb-4 w-full relative">
 					<div className="col-span-1">Prénom</div>
 					<div className="col-span-1">Nom de famille</div>
-					<div className="col-span-1">{'Date d\'inscription'}</div>
+					<div className="col-span-1">{"Date d'inscription"}</div>
 					<div className="col-span-1">Fichiers déposés</div>
 					<div className="col-span-1">Espace de stockage utilisé</div>
 				</header>
