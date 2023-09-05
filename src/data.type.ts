@@ -16,6 +16,7 @@ export type User = {
 	storage: number;
 	totalUsedSizeBytes: number;
 	numberOfFiles: number;
+	signedUpAt: Date;
 };
 
 export enum Role {

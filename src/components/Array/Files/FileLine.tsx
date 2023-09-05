@@ -6,7 +6,7 @@ import { ReactComponent as FileIcon } from 'assets/icons/file_empty.svg';
 import { ReactComponent as PDFIcon } from 'assets/icons/pdf.svg';
 import { ReactComponent as ImageIcon } from 'assets/icons/image.svg';
 import { ReactComponent as ExcelIcon } from 'assets/icons/calc.svg';
-import Options from './Options';
+import Options from '../../Options';
 import { getExtensionType } from 'helper/files';
 
 type Props = {
