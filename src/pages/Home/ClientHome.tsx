@@ -199,6 +199,8 @@ const ClientHome = () => {
 		if (success === 'false') toast.error('Erreur lors du paiement');
 	}, []);
 
+	const filesSorted = [...getFilteredFiles()].sort(handleSort(sort.direction, sort.column));
+
 	return (
 		<main className="bg-neutral-white  gap-12 flex flex-col">
 			<div className="flex gap-4 rounded-3xl bg-neutral-light p-4 w-full overflow-hidden">
@@ -248,9 +250,8 @@ const ClientHome = () => {
 				/>
 
 				<div className="bg-neutral-lighter w-full flex flex-col items-center ">
-					{[...getFilteredFiles()]
-						.sort(handleSort(sort.direction, sort.column))
-						.map((file, index) => (
+					{filesSorted.length > 0 ? (
+						filesSorted.map((file, index) => (
 							<React.Fragment key={file.id}>
 								<FileLine
 									name={file.name}
@@ -268,7 +269,10 @@ const ClientHome = () => {
 									<div className="border-b border-neutral-light w-[98%]" />
 								)}
 							</React.Fragment>
-						))}
+						))
+					) : (
+						<span className="text-red-500 text-2xl mx-auto">Pas de fichiers</span>
+					)}
 				</div>
 			</div>
 			<div className="flex items-center w-full p-4 bg-neutral-light rounded-3xl gap-8">
