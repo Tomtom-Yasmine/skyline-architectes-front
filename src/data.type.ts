@@ -64,5 +64,4 @@ export type InvoiceData = {
     creationDate: Date;
     isPinned: boolean;
     price: number;
-    url: string;
 };
