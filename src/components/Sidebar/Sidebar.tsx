@@ -78,8 +78,8 @@ const Sidebar = () => {
 					<NavItem
 						label="Tous les clients"
 						icon={FileIcon}
-						onClick={() => navigate('/customers')}
-						isActive={() => matchPath(window.location.pathname, '/customers') !== null}
+						onClick={() => navigate('/')}
+						isActive={() => matchPath(window.location.pathname, '/') !== null}
 					/>
 					<NavItem
 						label="Statistiques"
