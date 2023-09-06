@@ -8,7 +8,6 @@ import { ReactComponent as ClockOutlineWhiteIcon } from 'assets/icons/clock.outl
 import { ReactComponent as ClockFillWhiteIcon } from 'assets/icons/clock.fill.white.svg';
 import { ReactComponent as TrashcanOutlineWhiteIcon } from 'assets/icons/trashcan.outline.white.svg';
 import { ReactComponent as TrashcanFillWhiteIcon } from 'assets/icons/trashcan.fill.white.svg';
-import { ReactComponent as CloudOutlineWhiteIcon } from 'assets/icons/cloud.outline.white.svg';
 import { ReactComponent as CloudFillWhiteIcon } from 'assets/icons/cloud.fill.white.svg';
 import NavItem from './NavItem';
 import { matchPath, useNavigate } from 'react-router-dom';
