@@ -17,7 +17,7 @@ const FilesFilters = <T extends Option>({
 }: Props<T>) => {
 	return (
 		<MultiSelect
-			className="absolute left-1 w-32"
+			className="w-32"
 			options={options}
 			value={filtersSelected}
 			onChange={handleFiltersChange}

@@ -101,7 +101,7 @@ const ClientHome = () => {
 			const url = `${process.env.REACT_APP_API_BASE_URL}file/${id}/raw?accessToken=${result.data.accessToken}`;
 			window.open(url, '_blank');
 		} catch (_) {
-			toast.error('Erreur lors de l\'ouverture du fichier');
+			toast.error("Erreur lors de l'ouverture du fichier");
 		}
 	};
 
@@ -135,9 +135,15 @@ const ClientHome = () => {
 			if (pin) toast.success('Fichier désépinglé avec succès');
 			else toast.success('Fichier épinglé avec succès');
 		} catch (error) {
-			toast.error('Impossible de modifier l\'épinglage');
+			toast.error("Impossible de modifier l'épinglage");
 		}
 		setFiles(newFiles);
+	};
+
+	const [search, setSearch] = useState<string>('');
+
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearch(e.target.value);
 	};
 
 	const [sort, setSort] = useState<{
@@ -150,21 +156,32 @@ const ClientHome = () => {
 
 	const handleSort =
 		(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
-			(a: FileData, b: FileData) => {
-				if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
-				if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
-				return 0;
-			};
+		(a: FileData, b: FileData) => {
+			if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
+			if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
+			return 0;
+		};
 
 	const getFilteredFiles = () => {
-		if (filters.length === 0) return files;
-		return files.filter((file) => {
-			return (
-				(filters.includes('images') && file.url.includes('jpg')) ||
-				(filters.includes('pdf') && file.url.includes('pdf')) ||
-				(filters.includes('excels') && file.url.includes('xls'))
+		let filteredFiles = files;
+
+		if (filters.length > 0) {
+			filteredFiles = filteredFiles.filter((file) => {
+				return (
+					(filters.includes('images') && file.url.includes('jpg')) ||
+					(filters.includes('pdf') && file.url.includes('pdf')) ||
+					(filters.includes('excels') && file.url.includes('xls'))
+				);
+			});
+		}
+
+		if (search.length > 0) {
+			filteredFiles = filteredFiles.filter((file) =>
+				file.name.toLowerCase().includes(search.toLowerCase())
 			);
-		});
+		}
+
+		return filteredFiles;
 	};
 
 	const handleChangeFilters = (filters: Option[]) => {
@@ -188,7 +205,7 @@ const ClientHome = () => {
 				toast.success('Fichier uploadé avec succès');
 				setNewFile(null);
 			} catch (error) {
-				toast.error('Erreur lors de l\'upload du fichier');
+				toast.error("Erreur lors de l'upload du fichier");
 			}
 		}
 	};
@@ -247,6 +264,8 @@ const ClientHome = () => {
 					onSortChange={(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
 						setSort({ direction, column })
 					}
+					onSearchChange={(search: string) => setSearch(search)}
+					search={search}
 				/>
 
 				<div className="bg-neutral-lighter w-full flex flex-col items-center ">
