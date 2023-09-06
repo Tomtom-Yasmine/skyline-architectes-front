@@ -4,13 +4,24 @@ import cn from 'classnames';
 type Props = {
 	label: string;
 	icon: any;
+	activeIcon?: any;
 	onClick?: () => void;
 	isActive?: () => boolean;
 	innerChildren?: React.ReactNode;
 	outerChildren?: React.ReactNode;
 };
 
-const NavItem = ({ label, icon: Icon, onClick, isActive, innerChildren, outerChildren }: Props) => {
+const NavItem = ({
+	label,
+	icon,
+	activeIcon,
+	onClick,
+	isActive,
+	innerChildren,
+	outerChildren,
+}: Props) => {
+	const Icon = isActive && isActive() && activeIcon ? activeIcon : icon;
+
 	return (
 		<div className={cn('flex', 'flex-col', 'gap-2', 'w-full')}>
 			<div

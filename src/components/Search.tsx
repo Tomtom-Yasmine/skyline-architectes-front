@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef } from 'react';
-import { ReactComponent as PinIcon } from 'assets/icons/pin_empty.svg';
+import { ReactComponent as MagnifyingGlassIcon } from 'assets/icons/magnifying_glass.svg';
 
 type Props = ComponentPropsWithoutRef<'input'> & {
 	setSearch: (search: string) => void;
@@ -18,7 +18,9 @@ const Search = ({
 	};
 
 	return (
-		<div className={`flex gap-2 bg-neutral-lighter rounded-lg px-2 py-2 ${className}`}>
+		<div
+			className={`flex gap-2 bg-neutral-lighter rounded-lg px-2 py-2 items-center ${className}`}
+		>
 			<input
 				{...props}
 				type="search"
@@ -27,7 +29,7 @@ const Search = ({
 				onSubmit={searchOn === 'submit' ? handleChange : undefined}
 				className="grow bg-transparent"
 			/>
-			<PinIcon className="w-8 h-8 cursor-pointer" />
+			<MagnifyingGlassIcon className="w-5 h-5 cursor-pointer" />
 		</div>
 	);
 };

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from 'assets/images/logo.svg';
-import { ReactComponent as FileIcon } from 'assets/icons/file_empty.svg';
-import { ReactComponent as PinIcon } from 'assets/icons/pin_empty.svg';
+import { ReactComponent as FileOutlineWhiteIcon } from 'assets/icons/file.outline.white.svg';
+import { ReactComponent as FileFillWhiteIcon } from 'assets/icons/file.fill.white.svg';
+import { ReactComponent as PinOutlineWhiteIcon } from 'assets/icons/pin.outline.white.svg';
+import { ReactComponent as PinFillWhiteIcon } from 'assets/icons/pin.fill.white.svg';
+import { ReactComponent as ClockOutlineWhiteIcon } from 'assets/icons/clock.outline.white.svg';
+import { ReactComponent as ClockFillWhiteIcon } from 'assets/icons/clock.fill.white.svg';
+import { ReactComponent as TrashcanOutlineWhiteIcon } from 'assets/icons/trashcan.outline.white.svg';
+import { ReactComponent as TrashcanFillWhiteIcon } from 'assets/icons/trashcan.fill.white.svg';
+import { ReactComponent as CloudOutlineWhiteIcon } from 'assets/icons/cloud.outline.white.svg';
+import { ReactComponent as CloudFillWhiteIcon } from 'assets/icons/cloud.fill.white.svg';
 import NavItem from './NavItem';
 import { matchPath, useNavigate } from 'react-router-dom';
 import { useApi } from 'hooks';
@@ -33,32 +41,36 @@ const Sidebar = () => {
 				<div className="flex flex-col gap-4 w-full">
 					<NavItem
 						label="Tous les fichiers"
-						icon={FileIcon}
+						icon={FileOutlineWhiteIcon}
+						activeIcon={FileFillWhiteIcon}
 						onClick={() => navigate('/')}
 						isActive={() => matchPath(window.location.pathname, '/') !== null}
 					/>
 					<NavItem
 						label="Épinglés"
-						icon={PinIcon}
+						icon={PinOutlineWhiteIcon}
+						activeIcon={PinFillWhiteIcon}
 						onClick={() => navigate('/home/pinned')}
 						isActive={() => matchPath(window.location.pathname, '/home/pinned') !== null}
 					/>
 					<NavItem
 						label="Récents"
-						icon={PinIcon}
+						icon={ClockOutlineWhiteIcon}
+						activeIcon={ClockFillWhiteIcon}
 						onClick={() => navigate('/home/recent')}
 						isActive={() => matchPath(window.location.pathname, '/home/recent') !== null}
 					/>
 					<NavItem
 						label="Corbeille"
-						icon={PinIcon}
+						icon={TrashcanOutlineWhiteIcon}
+						activeIcon={TrashcanFillWhiteIcon}
 						onClick={() => navigate('/home/trash')}
 						isActive={() => matchPath(window.location.pathname, '/home/trash') !== null}
 					/>
 					<br />
 					<NavItem
 						label="Stockage"
-						icon={PinIcon}
+						icon={CloudFillWhiteIcon}
 						outerChildren={
 							<>
 								<UserStorage user={user} />
@@ -76,14 +88,16 @@ const Sidebar = () => {
 			) : (
 				<div className="flex flex-col gap-4 w-full">
 					<NavItem
-						label="Tous les clients"
-						icon={FileIcon}
+						label="Clients"
+						icon={FileOutlineWhiteIcon}
+						activeIcon={FileFillWhiteIcon}
 						onClick={() => navigate('/')}
 						isActive={() => matchPath(window.location.pathname, '/') !== null}
 					/>
 					<NavItem
 						label="Statistiques"
-						icon={PinIcon}
+						icon={ClockOutlineWhiteIcon}
+						activeIcon={ClockFillWhiteIcon}
 						onClick={() => navigate('/statistics')}
 						isActive={() => matchPath(window.location.pathname, '/statistics') !== null}
 					/>
