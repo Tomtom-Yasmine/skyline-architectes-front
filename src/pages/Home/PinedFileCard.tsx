@@ -20,7 +20,7 @@ const PinnedFileCard = ({
 	options = [],
 }: Props) => {
 	return (
-		<div className="flex flex-col gap-4 bg-neutral-lighter w-56 text-center py-4 rounded-3xl text-neutral-dark line-clamp-1">
+		<div className="flex flex-col gap-4 bg-neutral-lighter w-56 text-center py-4 rounded-3xl text-neutral-dark">
 			{file.name}
 			{extensionType === 'image' ? (
 				<img src={file.url} alt="file preview" className="h-32" />
@@ -29,7 +29,7 @@ const PinnedFileCard = ({
 					{extensionType.toUpperCase()}
 				</div>
 			)}
-			<div className="flex p-4 justify-between items-center line-clamp-1">
+			<div className="flex p-4 justify-between items-center">
 				<button onClick={handlePinClick}>
 					<PinIconFull />
 				</button>
