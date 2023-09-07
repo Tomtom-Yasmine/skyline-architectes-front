@@ -102,7 +102,7 @@ const ClientHome = () => {
 			const url = `${process.env.REACT_APP_API_BASE_URL}file/${id}/raw?accessToken=${result.data.accessToken}`;
 			window.open(url, '_blank');
 		} catch (_) {
-			toast.error('Erreur lors de l\'ouverture du fichier');
+			toast.error("Erreur lors de l'ouverture du fichier");
 		}
 	};
 
@@ -136,7 +136,7 @@ const ClientHome = () => {
 			if (pin) toast.success('Fichier désépinglé avec succès');
 			else toast.success('Fichier épinglé avec succès');
 		} catch (error) {
-			toast.error('Impossible de modifier l\'épinglage');
+			toast.error("Impossible de modifier l'épinglage");
 		}
 		setFiles(newFiles);
 	};
@@ -157,11 +157,11 @@ const ClientHome = () => {
 
 	const handleSort =
 		(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
-			(a: FileData, b: FileData) => {
-				if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
-				if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
-				return 0;
-			};
+		(a: FileData, b: FileData) => {
+			if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
+			if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
+			return 0;
+		};
 
 	const getFilteredFiles = () => {
 		let filteredFiles = files;
@@ -169,9 +169,10 @@ const ClientHome = () => {
 		if (filters.length > 0) {
 			filteredFiles = filteredFiles.filter((file) => {
 				return (
-					(filters.includes('images') && ['jpg', 'jpeg', 'png'].includes(file.extension)) ||
+					(filters.includes('images') &&
+						['jpg', 'jpeg', 'png', 'gif'].includes(file.extension)) ||
 					(filters.includes('pdf') && file.extension === 'pdf') ||
-					(filters.includes('excels') && file.extension === 'xls')
+					(filters.includes('excels') && file.extension === 'xlsx')
 				);
 			});
 		}
@@ -208,11 +209,11 @@ const ClientHome = () => {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			} catch (error: any) {
 				if (error.response.data.message === 'ERR:USER_STORAGE_LIMIT_EXCEEDED') {
-					toast.error('Vous n\'avez pas assez d\'espace de stockage');
+					toast.error("Vous n'avez pas assez d'espace de stockage");
 				} else if (error.response.data.message === 'ERR:FILE_EXTENSION_NOT_ALLOWED') {
 					toast.error('Extension de fichier non autorisée');
 				} else {
-					toast.error('Erreur lors de l\'upload du fichier');
+					toast.error("Erreur lors de l'upload du fichier");
 				}
 			}
 		}

@@ -41,6 +41,8 @@ const Customers = () => {
 		initiateFiles();
 	}, [api, id]);
 
+	const [search, setSearch] = useState<string>('');
+
 	const [sort, setSort] = useState<{
 		direction: 'up' | 'down';
 		column: 'name' | 'creationDate' | 'size';
@@ -51,22 +53,33 @@ const Customers = () => {
 
 	const handleSort =
 		(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
-			(a: FileData, b: FileData) => {
-				if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
-				if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
-				return 0;
-			};
+		(a: FileData, b: FileData) => {
+			if (a[column] < b[column]) return direction === 'up' ? -1 : 1;
+			if (a[column] > b[column]) return direction === 'up' ? 1 : -1;
+			return 0;
+		};
 
 	const getFilteredFiles = () => {
-		if (filters.length === 0) return files;
-		return files.filter((file) => {
-			return (
-				(filters.includes('images') &&
-					['jpg', 'jpeg', 'png', 'gif'].includes(file.extension)) ||
-				(filters.includes('pdf') && file.extension === 'pdf') ||
-				(filters.includes('excels') && file.extension === 'xlsx')
+		let filteredFiles = files;
+
+		if (filters.length === 0) {
+			filteredFiles = filteredFiles.filter((file) => {
+				return (
+					(filters.includes('images') &&
+						['jpg', 'jpeg', 'png', 'gif'].includes(file.extension)) ||
+					(filters.includes('pdf') && file.extension === 'pdf') ||
+					(filters.includes('excels') && file.extension === 'xlsx')
+				);
+			});
+		}
+
+		if (search.length > 0) {
+			filteredFiles = filteredFiles.filter((file) =>
+				file.name.toLowerCase().includes(search.toLowerCase())
 			);
-		});
+		}
+
+		return filteredFiles;
 	};
 
 	const handleChangeFilters = (filters: Option[]) => {
@@ -109,6 +122,8 @@ const Customers = () => {
 					onSortChange={(direction: 'up' | 'down', column: 'name' | 'creationDate' | 'size') =>
 						setSort({ direction, column })
 					}
+					onSearchChange={(search: string) => setSearch(search)}
+					search={search}
 				/>
 
 				<div className="bg-neutral-lighter w-full flex flex-col items-center ">
