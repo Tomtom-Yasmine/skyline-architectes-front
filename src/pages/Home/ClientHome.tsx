@@ -228,7 +228,7 @@ const ClientHome = () => {
 
 	return (
 		<main className="bg-neutral-white  gap-12 flex flex-col">
-			<div className="flex gap-4 rounded-3xl bg-neutral-light p-4 w-full overflow-hidden">
+			<div className="flex gap-4 rounded-3xl bg-neutral-light p-4 w-full">
 				{/* TODO add a hidden scrollbar */}
 				{files
 					.filter((file) => file.isPinned)
