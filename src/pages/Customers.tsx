@@ -31,6 +31,7 @@ const Customers = () => {
 					isPinned: file.isPinned,
 					isEditing: false,
 					url: '../assets/icons/add.svg',
+					extension: file.extension,
 				}));
 				setFiles(formattedFiles);
 			} catch (error) {
@@ -60,9 +61,10 @@ const Customers = () => {
 		if (filters.length === 0) return files;
 		return files.filter((file) => {
 			return (
-				(filters.includes('images') && file.url.includes('jpg')) ||
-				(filters.includes('pdf') && file.url.includes('pdf')) ||
-				(filters.includes('excels') && file.url.includes('xls'))
+				(filters.includes('images') &&
+					['jpg', 'jpeg', 'png', 'gif'].includes(file.extension)) ||
+				(filters.includes('pdf') && file.extension === 'pdf') ||
+				(filters.includes('excels') && file.extension === 'xlsx')
 			);
 		});
 	};

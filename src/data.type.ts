@@ -61,6 +61,7 @@ export type FileData = {
 	isPinned: boolean;
 	isEditing: boolean;
 	url: string;
+	extension: string;
 };
 
 export type InvoiceData = {
