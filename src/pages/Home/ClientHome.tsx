@@ -205,8 +205,15 @@ const ClientHome = () => {
 				setFiles((files) => [...files, file]);
 				toast.success('Fichier uploadé avec succès');
 				setNewFile(null);
-			} catch (error) {
-				toast.error('Erreur lors de l\'upload du fichier');
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			} catch (error: any) {
+				if (error.response.data.message === 'ERR:USER_STORAGE_LIMIT_EXCEEDED') {
+					toast.error('Vous n\'avez pas assez d\'espace de stockage');
+				} else if (error.response.data.message === 'ERR:FILE_EXTENSION_NOT_ALLOWED') {
+					toast.error('Extension de fichier non autorisée');
+				} else {
+					toast.error('Erreur lors de l\'upload du fichier');
+				}
 			}
 		}
 	};
